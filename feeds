@@ -20,5 +20,5 @@ program
 program.parse(process.argv)
 
 if (process.argv.length == 2) {
-  const app = require('./app')
+  const app = require('./lib/server')
 }
