@@ -20,5 +20,5 @@ program
 program.parse(process.argv)
 
 if (process.argv.length == 2) {
-  console.log('Running binary')
+  const app = require('./app')
 }

@@ -1,6 +1,7 @@
-const config = require('./config/config')
 const compression = require('compression')
 const morgan = require('morgan')
+const config = require('./config/config')
+const logger = require('./config/logger')(module)
 
 const express = require('express')
 const app = express()
@@ -18,4 +19,6 @@ app.use((req, res, next) => {
 app.get('/', (req, res) => res.json({ data: "hello world" }))
 app.use((req, res, next) => res.status(404).json({ error: "This endpoint does not exist" }))
 
-app.listen(process.env.PORT, () => console.log(`Example app listening on port ${process.env.PORT}`))
+app.listen(process.env.PORT, () => logger.info(`Listening on port ${process.env.PORT}`))
+
+module.exports = app
