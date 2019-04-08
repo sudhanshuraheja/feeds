@@ -1,0 +1,24 @@
+#!/usr/bin/env node
+const program = require('commander')
+const package = require('./package.json')
+
+program
+  .version(package.version, '-v, --version')
+
+program
+  .command('migrate')
+  .action((args) => {
+    console.log('Running migration')
+  })
+
+program
+  .command('worker')
+  .action((args) => {
+    console.log('Running worker')
+  })
+
+program.parse(process.argv)
+
+if (process.argv.length == 2) {
+  console.log('Running binary')
+}
