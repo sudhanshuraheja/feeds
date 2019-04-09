@@ -6,15 +6,16 @@ program
   .version(package.version, '-v, --version')
 
 program
-  .command('migrate')
-  .action((args) => {
-    console.log('Running migration')
+  .command('migrate <where>')
+  .action((where, args) => {
+    console.log(`Running migration ${where}`)
+    const migrate = require('./lib/db/migrate')
   })
 
 program
-  .command('worker')
-  .action((args) => {
-    console.log('Running worker')
+  .command('worker <which>')
+  .action((which, args) => {
+    console.log(`Running worker ${which}`)
   })
 
 program.parse(process.argv)
