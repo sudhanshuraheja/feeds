@@ -8,8 +8,15 @@ program
 program
   .command('migrate <where>')
   .action((where, args) => {
-    console.log(`Running migration ${where}`)
-    const migrate = require('./lib/db/migrate')
+    const migrate = require('./lib/migrate')
+    migrate.connect()
+    if (where === 'up') {
+      migrate.up()
+    } else if (where == 'down') {
+      migrate.down()
+    } else {
+      console.error(`Migration can only be run up or down, "${where}" is invalid`)      
+    }
   })
 
 program
@@ -21,5 +28,6 @@ program
 program.parse(process.argv)
 
 if (process.argv.length == 2) {
+  console.log(`Running app`)
   const app = require('./lib/server')
 }
