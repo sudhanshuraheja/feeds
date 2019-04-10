@@ -14,8 +14,10 @@ program
       migrate.up()
     } else if (where == 'down') {
       migrate.down()
+    } else if (where == 'check') {
+      migrate.check()
     } else {
-      console.error(`Migration can only be run up or down, "${where}" is invalid`)      
+      console.error(`Migration can only be run up, down or check, "${where}" is invalid`)      
     }
   })
 
