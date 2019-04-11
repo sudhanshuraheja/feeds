@@ -1,35 +1,33 @@
 #!/usr/bin/env node
 const program = require('commander')
-const package = require('./package.json')
+const packager = require('./package.json')
 
 program
-  .version(package.version, '-v, --version')
+  .version(packager.version, '-v, --version')
 
 program
   .command('migrate <where>')
-  .action((where, args) => {
+  .action((where) => {
+    // eslint-disable-next-line global-require
     const migrate = require('./lib/migrate')
     migrate.connect()
     if (where === 'up') {
       migrate.up()
-    } else if (where == 'down') {
+    } else if (where === 'down') {
       migrate.down()
-    } else if (where == 'check') {
+    } else if (where === 'check') {
       migrate.check()
     } else {
+      // eslint-disable-next-line no-console
       console.error(`Migration can only be run up, down or check, "${where}" is invalid`)      
     }
   })
 
-program
-  .command('worker <which>')
-  .action((which, args) => {
-    console.log(`Running worker ${which}`)
-  })
-
 program.parse(process.argv)
 
-if (process.argv.length == 2) {
+if (process.argv.length === 2) {
+  // eslint-disable-next-line no-console
   console.log(`Running app`)
-  const app = require('./lib/server')
+  // eslint-disable-next-line global-require
+  require('./lib/server')
 }
