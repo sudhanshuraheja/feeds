@@ -12,9 +12,9 @@ program
     const migrate = require('./lib/migrate')
     migrate.connect()
     if (where === 'up') {
-      migrate.up()
+      migrate.load('up')
     } else if (where === 'down') {
-      migrate.down()
+      migrate.load('down')
     } else if (where === 'check') {
       migrate.check()
     } else {
