@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 const program = require('commander')
 const packager = require('./package.json')
+const server = require('./lib/server')
 const migrate = require('./lib/migrate')
-const logger = require('./lib/config/logger')('./feeds')
 
 program
   .version(packager.version, '-v, --version')
@@ -14,9 +14,6 @@ program
   })
 
 program.parse(process.argv)
-
 if (process.argv.length === 2) {
-  logger.info(`Running app`)
-  // eslint-disable-next-line global-require
-  require('./lib/server')
+  server.init()
 }
