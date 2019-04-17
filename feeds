@@ -10,7 +10,7 @@ program
 program
   .command('migrate <up/down/check>')
   .action((direction) => {
-    migrate.load(direction)
+    migrate.init(direction)
   })
 
 program.parse(process.argv)
