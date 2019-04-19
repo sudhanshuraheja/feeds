@@ -8,9 +8,10 @@ program
   .version(packager.version, '-v, --version')
 
 program
-  .command('migrate <up/down/check>')
-  .action((direction) => {
-    migrate.init(direction)
+  .command('migrate <version/all>')
+  .action((version) => {
+    migrate.init(`${__dirname}/migrations`)
+    migrate.to(version)
   })
 
 program.parse(process.argv)
