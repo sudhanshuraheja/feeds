@@ -1,1 +1,0 @@
-CREATE TABLE IF NOT EXISTS temp_migrations_table (fake_value varchar(512))
