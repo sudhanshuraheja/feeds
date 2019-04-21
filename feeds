@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 const program = require('commander')
 const packager = require('./package.json')
-const server = require('./lib/server')
-const migrate = require('./lib/migrate')
+const server = require('./src/lib/server')
+const migrate = require('./src/lib/migrate')
 
 program
   .version(packager.version, '-v, --version')

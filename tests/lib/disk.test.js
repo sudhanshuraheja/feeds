@@ -1,12 +1,12 @@
-const disk = require('./')
+const disk = require('../../src/lib/disk')
 
 describe('Disk', () => {
   test('Read files from disk', async () => {
-    const file = await disk.readFile('./lib/disk/index.js')
+    const file = await disk.readFile('./src/lib/disk.js')
     expect(file).toMatch(`module.exports = disk`)
 
     try {
-      await disk.readFile('./lib/disk/index.js.fake')
+      await disk.readFile('./src/lib/disk.js.fake')
     } catch(e) {
       expect(e.message).toMatch(`ENOENT`)
     }
@@ -14,11 +14,11 @@ describe('Disk', () => {
   })
   
   test('Read folders from disk', async () => {
-    const files = await disk.readFolder('./lib/disk')
-    expect(files).toContain('index.test.js')
+    const files = await disk.readFolder('./src/lib')
+    expect(files).toContain('disk.js')
 
     try {
-      await disk.readFolder('./lib/disk/fake')
+      await disk.readFolder('./src/lib/fake')
     } catch(e) {
       expect(e.message).toMatch('ENOENT')
     }

@@ -1,5 +1,5 @@
 const { createLogger, format, transports } = require('winston')
-const config = require('./index')
+const config = require('./config')
 
 const logger = (callingModule) => {
   // eslint-disable-next-line new-cap

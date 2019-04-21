@@ -1,6 +1,6 @@
 const axios = require('axios')
-const server = require('./')
-const config = require('../config')
+const server = require('../../src/lib/server')
+const config = require('../../src/lib/config')
 
 describe('Server', () => {
 

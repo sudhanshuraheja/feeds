@@ -1,5 +1,5 @@
 const fs = require('fs')
-const errors = require('../errors')
+const errors = require('./errors')
 
 const disk = {
 

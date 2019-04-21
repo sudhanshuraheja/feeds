@@ -1,7 +1,7 @@
 const { Pool } = require('pg')
-const config = require('../config')
-const logger = require('../config/logger')('lib/db')
-const errors = require('../errors/')
+const config = require('./config')
+const logger = require('./logger')('lib/db')
+const errors = require('./errors')
 
 let pool
 

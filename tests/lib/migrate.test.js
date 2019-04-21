@@ -1,6 +1,6 @@
-const migrate = require('./')
-const config = require('../config')
-const db = require('../db')
+const migrate = require('../../src/lib/migrate')
+const config = require('../../src/lib/config')
+const db = require('../../src/lib/db')
 
 describe('Migrations', () => {
 

@@ -1,8 +1,8 @@
 const redis = require("redis")
 const {promisify} = require('util');
-const config = require('../config')
-const errors = require('../errors')
-const logger = require('../config/logger')('lib/cache')
+const config = require('./config')
+const errors = require('./errors')
+const logger = require('./logger')('lib/cache')
 
 const cache = {
 

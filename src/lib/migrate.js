@@ -1,6 +1,6 @@
 const Postgrator = require('postgrator')
-const config = require('../config')
-const logger = require('../config/logger')('lib/migrate')
+const config = require('./config')
+const logger = require('./logger')('lib/migrate')
 
 const migrate = {
 
