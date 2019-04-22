@@ -1,17 +1,53 @@
+# Pull data about npm modules
 
+## Get doc count from npm registry and follow couchDb
 
+URL: https://replicate.npmjs.com
 
-https://api.npmjs.org/downloads/point/last-week/redis
+```javascript
+{
+    "db_name": "registry",
+    "doc_count": 960204,
+    "doc_del_count": 133,
+    "update_seq": 969357,
+    "purge_seq": 0,
+    "compact_running": false,
+    "disk_size": 8579453156,
+    "other": {
+        "data_size": 26665676949
+    },
+    "data_size": 8409272243,
+    "sizes": {
+        "file": 8579453156,
+        "active": 8409272243,
+        "external": 26665676949
+    },
+    "instance_start_time": "1555736406615787",
+    "disk_format_version": 6,
+    "committed_update_seq": 969357,
+    "compacted_seq": 963391,
+    "uuid": "b39742d8adc3edcfa3a3540d4437b3be"
+}
+```
 
+## Get downloads per week from npm
+
+URL: https://api.npmjs.org/downloads/point/last-week/redis
+
+```javascript
 {
     "downloads": 1056053,
     "start": "2019-04-15",
     "end": "2019-04-21",
     "package": "redis"
 }
+```
 
-registry.npmjs.org/-/v1/search?text=poodle-service
+## Search for a package in the NPM registry
 
+URL: registry.npmjs.org/-/v1/search?text=poodle-service
+
+```javascript
 {
     "objects": [
         {
@@ -105,35 +141,13 @@ registry.npmjs.org/-/v1/search?text=poodle-service
     "total": 2,
     "time": "Mon Apr 22 2019 02:53:12 GMT+0000 (UTC)"
 }
+```
 
-https://replicate.npmjs.com
+## Get stars from github
 
-{
-    "db_name": "registry",
-    "doc_count": 960204,
-    "doc_del_count": 133,
-    "update_seq": 969357,
-    "purge_seq": 0,
-    "compact_running": false,
-    "disk_size": 8579453156,
-    "other": {
-        "data_size": 26665676949
-    },
-    "data_size": 8409272243,
-    "sizes": {
-        "file": 8579453156,
-        "active": 8409272243,
-        "external": 26665676949
-    },
-    "instance_start_time": "1555736406615787",
-    "disk_format_version": 6,
-    "committed_update_seq": 969357,
-    "compacted_seq": 963391,
-    "uuid": "b39742d8adc3edcfa3a3540d4437b3be"
-}
+URL: https://api.github.com/repos/expressjs/express
 
-https://api.github.com/repos/expressjs/express
-
+```javascript
 {
     "id": 237159,
     "node_id": "MDEwOlJlcG9zaXRvcnkyMzcxNTk=",
@@ -256,6 +270,8 @@ https://api.github.com/repos/expressjs/express
     "network_count": 7363,
     "subscribers_count": 1864
 }
+```
 
-http://registry.npmjs.org/express
+## Get details about a package
 
+URL: http://registry.npmjs.org/express
