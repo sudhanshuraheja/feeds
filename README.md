@@ -2,7 +2,7 @@
 
 ## Get doc count from npm registry and follow couchDb
 
-URL: https://replicate.npmjs.com
+URL: <https://replicate.npmjs.com>
 
 ```javascript
 {
@@ -32,7 +32,7 @@ URL: https://replicate.npmjs.com
 
 ## Get downloads per week from npm
 
-URL: https://api.npmjs.org/downloads/point/last-week/redis
+URL: <https://api.npmjs.org/downloads/point/last-week/redis>
 
 ```javascript
 {
@@ -45,7 +45,7 @@ URL: https://api.npmjs.org/downloads/point/last-week/redis
 
 ## Search for a package in the NPM registry
 
-URL: registry.npmjs.org/-/v1/search?text=poodle-service
+URL: <https://registry.npmjs.org/-/v1/search?text=poodle-service>
 
 ```javascript
 {
@@ -145,7 +145,7 @@ URL: registry.npmjs.org/-/v1/search?text=poodle-service
 
 ## Get stars from github
 
-URL: https://api.github.com/repos/expressjs/express
+URL: <https://api.github.com/repos/expressjs/express>
 
 ```javascript
 {
@@ -274,4 +274,4 @@ URL: https://api.github.com/repos/expressjs/express
 
 ## Get details about a package
 
-URL: http://registry.npmjs.org/express
+URL: <http://registry.npmjs.org/express>
