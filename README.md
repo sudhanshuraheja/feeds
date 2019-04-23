@@ -30,12 +30,16 @@ package
     homepage string
     bugs string
     licence string
+    created datetime
+    updated datetime
 
 human
     uuid
     email string
     name string
     url string
+    created datetime
+    updated datetime
 
 packageContributors
     uuid
@@ -44,6 +48,8 @@ packageContributors
     human (human.uuid)
     type string  // contributor/maintainer
     active bool
+    created datetime
+    updated datetime
 
 packageDependencies
     uuid
@@ -53,6 +59,8 @@ packageDependencies
     mapped (package.uuid)
     type string  // dep/dev
     active bool
+    created datetime
+    updated datetime
 
 npmStars
     uuid
@@ -61,6 +69,8 @@ npmStars
     user string
     like bool
     active bool
+    created datetime
+    updated datetime
 
 keywords
     uuid
@@ -68,6 +78,40 @@ keywords
     version (package.distributionLatest)
     name string
     active bool
+    created datetime
+    updated datetime
+
+downloads
+    uuid
+    id (package.uuid)
+    name string
+    start datetime
+    end datetime
+    downloads bigint
+    created datetime
+    updated datetime
+
+githubStars
+    uuid
+    id (package.uuid)
+    name string
+    avatarURL string
+    description string
+    createdAt datetime
+    updatedAt datetime
+    pushedAt datetime
+    homepage string // url
+    size bigint
+    stars bigint // stargazers_count
+    subscribers bigint // subscribers_count
+    forks bigint // forks
+    language string
+    archived bool
+    disabled bool
+    openIssueCount bigint
+    license string // license.spdx_id
+    created datetime
+    updated datetime
 ```
 
 ```text
@@ -194,14 +238,28 @@ URL: <https://replicate.npmjs.com>
 
 ## Get downloads per week from npm
 
-URL: <https://api.npmjs.org/downloads/point/last-week/redis>
+URL: <https://api.npmjs.org/downloads/point/2019-04-15:2019-04-21/jquery,npm,express>
 
 ```javascript
 {
-    "downloads": 1056053,
-    "start": "2019-04-15",
-    "end": "2019-04-21",
-    "package": "redis"
+    "jquery": {
+        "downloads": 2276060,
+        "package": "jquery",
+        "start": "2019-04-15",
+        "end": "2019-04-21"
+    },
+    "npm": {
+        "downloads": 1493442,
+        "package": "npm",
+        "start": "2019-04-15",
+        "end": "2019-04-21"
+    },
+    "express": {
+        "downloads": 7197810,
+        "package": "express",
+        "start": "2019-04-15",
+        "end": "2019-04-21"
+    }
 }
 ```
 
