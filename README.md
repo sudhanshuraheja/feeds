@@ -1,5 +1,167 @@
 # Pull data about npm modules
 
+## Data Structures
+
+```text
+package
+    uuid
+    id string
+    rev string
+    name string
+    description string
+    author (human.uuid)
+    distributionLatest string
+    latestName string
+    latestDescription string
+    latestVersion string
+    latestAuthor (human.uuid)
+    latestDistShasum string
+    latestDistTarball string
+    latestDeprecated string
+    timeModified datetime
+    timeCreated datetime
+    timeLatest datetime
+    repoType string
+    repoURL string
+    repoGithubOrg string
+    repoGithubRepo string
+    readme string
+    readmeFileName string
+    homepage string
+    bugs string
+    licence string
+
+human
+    uuid
+    email string
+    name string
+    url string
+
+packageContributors
+    uuid
+    id (package.uuid)
+    version (package.distributionLatest)
+    human (human.uuid)
+    type string  // contributor/maintainer
+    active bool
+
+packageDependencies
+    uuid
+    id (package.uuid)
+    version (package.distributionLatest)
+    name string
+    mapped (package.uuid)
+    type string  // dep/dev
+    active bool
+
+npmStars
+    uuid
+    id (package.uuid)
+    version (package.distributionLatest)
+    user string
+    like bool
+    active bool
+
+keywords
+    uuid
+    id (package.uuid)
+    version (package.distributionLatest)
+    name string
+    active bool
+```
+
+```text
+_id <string>
+_rev <string>
+name <string>
+description <string>
+dist-tags {
+    latest <npm_version.number>
+    next <npm_version.number>
+    ... <ignore>
+}
+versions {
+    <npm_version.number> { // the version is dist-tag.latest
+        name <string>
+        description <string>
+        version <npm_version.number>
+        author <human>
+        contributors [<human>]
+        dependencies {
+            <string> <string> // first string is a package, the second is semver
+        }
+        optionalDependencies <ignore>
+        devDependencies {
+            <string> <string> // first string is a package, the second is semver
+        }
+        bundleDependencies <ignore>
+        peerDependencies <ignore>
+        keywords [<string>]
+        directories <ignore>
+        scripts <ignore>
+        bin <ignore>
+        engines {
+            <string> <string> // e.g. "node": ">= 0.2.0"
+        }
+        _id <string>
+        _nodeSupported <bool>
+        _npmVersion <string>
+        _nodeVersion <string>
+        dist <dist>
+        deprecated <string>
+        _hasShrinkwrap <bool>
+    }
+    ...
+}
+maintainers [<human>]
+author <human>
+time {
+    modified <datetime>
+    created <datetime>
+    <npm_version.number> <datetime> // the version is dist-tag.latest
+    ...
+}
+repository <repository>
+users {
+    <npm_user.id> <bool>
+    ...
+}
+readme <string>
+readmeFilename <string>
+homepage <string> // url
+keywords [<string>]
+contributors [<human>]
+bugs <string> // url
+licence <string>
+
+
+human <
+    email <string>
+    name <string>
+    url <string>
+>
+
+dist <
+    shasum <string>
+    tarball <string>
+>
+
+repository <
+    type <string>
+    url <string> // to be split into person and repo e.g git://github.com/npm/npm.git
+    github_org <string> // evaluated
+    github_repo <string> // evaluated
+>
+
+npm_user <
+    id <string>
+>
+
+npm_version <
+    number <string>
+>
+```
+
 ## Get doc count from npm registry and follow couchDb
 
 URL: <https://replicate.npmjs.com>
