@@ -14,7 +14,10 @@ program
     migrate.to(version)
   })
 
+program
+  .command('start')
+  .action(() => {
+    server.init()
+  })
+
 program.parse(process.argv)
-if (process.argv.length === 2) {
-  server.init()
-}
