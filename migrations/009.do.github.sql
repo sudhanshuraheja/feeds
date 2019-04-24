@@ -1,0 +1,22 @@
+CREATE TABLE IF NOT EXISTS github (
+  uuid UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id UUID,
+  name VARCHAR(128),
+  avatarURL VARCHAR(128),
+  description VARCHAR(512),
+  createdAt TIMESTAMP WITH TIME ZONE,
+  updatedAt TIMESTAMP WITH TIME ZONE,
+  pushedAt TIMESTAMP WITH TIME ZONE,
+  homepage VARCHAR(128),
+  size BIGINT,
+  stars BIGINT,
+  subscribers BIGINT,
+  forks BIGINT,
+  openIssueCount BIGINT,
+  language VARCHAR(32),
+  licence VARCHAR(16),
+  archived BOOL,
+  disabled BOOL,
+  created TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
+  updated TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now()
+);
