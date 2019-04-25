@@ -1,4 +1,4 @@
-const errors = require('../../src/lib/errors')
+const errors = require('./errors')
 
 describe('Errors', () => {
 

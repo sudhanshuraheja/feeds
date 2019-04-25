@@ -1,6 +1,6 @@
 const axios = require('axios')
-const server = require('../../src/lib/server')
-const config = require('../../src/lib/config')
+const server = require('./server')
+const config = require('../lib/config')
 
 describe('Server', () => {
 
@@ -18,6 +18,6 @@ describe('Server', () => {
     const response = await axios.get(`http://0.0.0.0:${config.env.PORT}/health`)
     expect(response.data.status).toBe('UP')
 
-    await server.release()
+    await server.release('manual')
   })
 })

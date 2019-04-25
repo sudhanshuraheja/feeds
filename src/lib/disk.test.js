@@ -1,4 +1,4 @@
-const disk = require('../../src/lib/disk')
+const disk = require('./disk')
 
 describe('Disk', () => {
   test('Read files from disk', async () => {

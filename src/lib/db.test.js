@@ -1,5 +1,5 @@
-const db = require('../../src/lib/db')
-const config = require('../../src/lib/config')
+const db = require('./db')
+const config = require('./config')
 
 describe('Database', () => {
 

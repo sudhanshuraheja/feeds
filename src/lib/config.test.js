@@ -1,5 +1,5 @@
 const path = require('path')
-const config = require('../../src/lib/config')
+const config = require('./config')
 
 describe('Config', () => {
   test('Check if it reads the correct value from the .test.env file', () => {

@@ -1,4 +1,4 @@
-const cache = require('../../src/lib/cache')
+const cache = require('./cache')
 
 describe ('Redis Cache', () => {
 

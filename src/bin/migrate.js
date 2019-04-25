@@ -1,6 +1,6 @@
 const Postgrator = require('postgrator')
-const config = require('./config')
-const logger = require('./logger')('lib/migrate')
+const config = require('../lib/config')
+const logger = require('../lib/logger')('lib/migrate')
 
 const migrate = {
 
@@ -24,8 +24,10 @@ const migrate = {
     try {
       if (version === 'all') {
         await migrate.grator.migrate()
+        logger.info(`Migrated all`)
       } else {
         await migrate.grator.migrate(version)
+        logger.info(`Migrated to ${version}`)
       }
     } catch(err) {
       logger.error(err)

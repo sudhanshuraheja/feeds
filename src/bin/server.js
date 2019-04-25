@@ -1,9 +1,9 @@
 const compression = require('compression')
 const morgan = require('morgan')
 const express = require('express')
-const config = require('./config')
-const logger = require('./logger')('lib/server')
-const db = require('./db')
+const config = require('../lib/config')
+const logger = require('../lib/logger')('lib/server')
+const db = require('../lib/db')
 
 const app = express()
 

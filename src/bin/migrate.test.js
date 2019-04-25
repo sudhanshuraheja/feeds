@@ -1,6 +1,6 @@
-const migrate = require('../../src/lib/migrate')
-const config = require('../../src/lib/config')
-const db = require('../../src/lib/db')
+const migrate = require('./migrate')
+const config = require('../lib/config')
+const db = require('../lib/db')
 
 describe('Migrations', () => {
 
@@ -23,7 +23,7 @@ describe('Migrations', () => {
   })
 
   afterAll(async () => {
-    await migrate.to()
+    await migrate.to('000')
     await db.end()
   })
 })
