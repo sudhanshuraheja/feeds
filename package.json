@@ -37,6 +37,6 @@
   },
   "scripts": {
     "start": "node app.js",
-    "test": "jest --collect-coverage --detectOpenHandles"
+    "test": "jest --detectOpenHandles"
   }
 }
