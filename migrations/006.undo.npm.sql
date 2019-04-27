@@ -1,1 +1,1 @@
-DROP TABLE npm;
+DROP TABLE IF EXISTS npm;

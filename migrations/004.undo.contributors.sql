@@ -1,1 +1,1 @@
-DROP TABLE contributors;
+DROP TABLE IF EXISTS contributors;

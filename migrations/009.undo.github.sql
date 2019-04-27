@@ -1,1 +1,1 @@
-DROP TABLE github;
+DROP TABLE IF EXISTS github;

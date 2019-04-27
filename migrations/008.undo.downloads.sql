@@ -1,1 +1,1 @@
-DROP TABLE downloads;
+DROP TABLE IF EXISTS downloads;
