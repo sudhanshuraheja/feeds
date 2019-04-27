@@ -8,7 +8,7 @@ describe('Github', () => {
             .toBe('https://api.github.com/repos/expressjs/express')
     })
 
-    test('API call to get downloads', async () => {
+    test('API call to get github stars', async () => {
         const response = await github.api('expressjs', 'express')
         expect(response.stargazers_count).toBe(43510)
         expect(response.forks_count).toBe(7365)
