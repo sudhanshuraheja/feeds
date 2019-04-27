@@ -1,85 +1,124 @@
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
+CREATE TABLE IF NOT EXISTS seq (
+	seq BIGINT PRIMARY KEY,
+	id VARCHAR(128),
+	rev VARCHAR(64),
+	created TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
+	updated TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now()
+);
+
 CREATE TABLE IF NOT EXISTS packages (
 	uuid UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
 	id VARCHAR(128),
 	rev VARCHAR(128),
 	name VARCHAR(128),
 	description TEXT,
-	author UUID,
-	distributionLatest VARCHAR(32),
-	latestName VARCHAR(128),
-	latestDescription VARCHAR(128),
-	latestVersion VARCHAR(16),
-	latestAuthor UUID,
-	latestDistShasum VARCHAR(64),
-	latestDistTarball VARCHAR(256),
-	latestDeprecated VARCHAR(256),
+	readme TEXT,
 	timeModified TIMESTAMP WITH TIME ZONE,
 	timeCreated TIMESTAMP WITH TIME ZONE,
-	timeLatest TIMESTAMP WITH TIME ZONE,
-	repoType VARCHAR(16),
-	repoURL VARCHAR(256),
-	repoGithubOrg VARCHAR(64),
-	repoGithubRepo VARCHAR(64),
-	readme TEXT,
+	repositoryType VARCHAR(16),
+	repositoryURL VARCHAR(256),
+	repositoryGithubOrg VARCHAR(64),
+	repositoryGithubRepo VARCHAR(64),
 	readmeFileName VARCHAR(256),
 	homepage VARCHAR(64),
-	bugs VARCHAR(128),
-	licence VARCHAR(16),
+	bugsURL VARCHAR(128),
+	bugsEmail VARCHAR(128),
+	licenceType VARCHAR(64),
+	licenseURL VARCHAR(128),
 	created TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
 	updated TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now()
 );
 
-CREATE TABLE IF NOT EXISTS humans (
+CREATE TABLE IF NOT EXISTS distributionTags (
 	uuid UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+	package UUID,
+	tag VARCHAR(64),
+	version VARCHAR(64),
+	created TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
+	updated TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now()
+);
+
+CREATE TABLE IF NOT EXISTS people (
+  uuid UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  package UUID,
+	version UUID,
+	versionName VARCHAR(128),
 	email VARCHAR(64),
 	name VARCHAR(64),
 	url VARCHAR(64),
-	created TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
-	updated TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now()
-);
-
-CREATE TABLE IF NOT EXISTS contributors (
-  uuid UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  id UUID,
-  version VARCHAR(32),
-  human UUID,
-  type VARCHAR(16),
-  active BOOL,
+  type VARCHAR(16), -- author / maintainers / contributors
   created TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
   updated TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now()
 );
 
-CREATE TABLE IF NOT EXISTS dependencies (
-  uuid UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  id UUID,
-  version VARCHAR(32),
-  name VARCHAR(128),
-  mapped UUID,
-  type VARCHAR(8),
-  active BOOL,
+CREATE TABLE IF NOT EXISTS versionTime (
+	uuid UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  package UUID,
+	tag VARCHAR(64),
+	time TIMESTAMP WITH TIME ZONE,
   created TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
   updated TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now()
 );
 
 CREATE TABLE IF NOT EXISTS npm (
   uuid UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  id UUID,
-  version VARCHAR(32),
+  package UUID,
   username VARCHAR(32),
   liked BOOL,
-  active BOOL,
   created TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
   updated TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now()
 );
 
 CREATE TABLE IF NOT EXISTS keywords (
   uuid UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  id UUID,
-  version VARCHAR(32),
+  package UUID,
+	version UUID,
+	versionName VARCHAR(128),
   name VARCHAR(128),
-  active BOOL,
   created TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
   updated TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now()
 );
+
+CREATE TABLE IF NOT EXISTS versions (	
+  uuid UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  package UUID,
+	id VARCHAR(64), -- npm@1.1.25
+  version VARCHAR(128),
+	name VARCHAR(128),
+	description VARCHAR(256),
+	homepage VARCHAR(256),
+	repositoryType VARCHAR(16),
+	repositoryURL VARCHAR(256),
+	repositoryGithubOrg VARCHAR(64),
+	repositoryGithubRepo VARCHAR(64),
+	bugsURL VARCHAR(128),
+	bugsEmail VARCHAR(128),
+	licenceType VARCHAR(64),
+	licenseURL VARCHAR(128),
+	committerName VARCHAR(128),
+	committerEmail VARCHAR(128),
+	npmVersion VARCHAR(32),
+	nodeVersion VARCHAR(32),
+	distShasum VARCHAR(64),
+	distTarball VARCHAR(256),
+	deprecated VARCHAR(256),
+  created TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
+  updated TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now()
+);
+
+CREATE TABLE IF NOT EXISTS dependencies (
+  uuid UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  package UUID,
+	version UUID,
+	versionName VARCHAR(128),
+  name VARCHAR(128),
+	mappedPackage UUID,
+	semver VARCHAR(64),
+	url VARCHAR(128),
+  type VARCHAR(8), -- dep / bundle / dev / optional
+  created TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
+  updated TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now()
+);
+
