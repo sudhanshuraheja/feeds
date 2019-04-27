@@ -1,5 +1,5 @@
 const nock = require('nock')
-const github = require('./index')
+const github = require('./github')
 
 describe('Github', () => {
 

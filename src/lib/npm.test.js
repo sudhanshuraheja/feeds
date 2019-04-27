@@ -1,4 +1,4 @@
-const npm = require('./index')
+const npm = require('./npm')
 
 describe('NPM', () => {
 

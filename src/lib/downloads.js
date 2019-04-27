@@ -1,6 +1,6 @@
 const axios = require('axios')
 const moment = require('moment')
-const logger = require('../../lib/logger')('domain/downloads')
+const logger = require('./logger')('domain/downloads')
 
 // Fetch data from this URL
 // https://api.npmjs.org/downloads/point/2019-04-15:2019-04-21/jquery,npm,express

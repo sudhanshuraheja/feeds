@@ -1,5 +1,5 @@
 const nock = require('nock')
-const downloads = require('./index')
+const downloads = require('./downloads')
 
 nock(`https://api.npmjs.org`)
   .get(`/downloads/point/2019-04-15:2019-04-21/jquery,npm,express`)
