@@ -77,6 +77,14 @@ const db = {
     } catch(err) {
       throw(new errors.PostgresQueryError(err))
     }
+  },
+
+  truncate: async (table) => {
+    try {
+      await db.query(`TRUNCATE ${table}`, [])
+    } catch(err) {
+      throw(new errors.PostgresQueryError(err))
+    }
   }
   
 }

@@ -3,6 +3,7 @@ const program = require('commander')
 const packager = require('./package.json')
 const server = require('./src/bin/server')
 const migrate = require('./src/bin/migrate')
+const replicate = require('./src/bin/replicate')
 
 program
   .version(packager.version, '-v, --version')
@@ -18,6 +19,12 @@ program
   .command('start')
   .action(() => {
     server.init()
+  })
+
+program
+  .command('replicate')
+  .action(() => {
+    replicate.init()
   })
 
 program.parse(process.argv)

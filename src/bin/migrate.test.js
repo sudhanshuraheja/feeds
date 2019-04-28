@@ -11,8 +11,8 @@ describe('Migrations', () => {
   })
 
   test('migrate to latest version', async () => {
-    await migrate.to('005')
-    const result = await db.tableExists('contributors')
+    await migrate.to('all')
+    const result = await db.tableExists('people')
     expect(result).toBe(true)
   })
 
@@ -23,7 +23,7 @@ describe('Migrations', () => {
   })
 
   afterAll(async () => {
-    await migrate.to('000')
+    await migrate.to('all')
     await db.end()
   })
 })

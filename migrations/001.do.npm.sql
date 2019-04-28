@@ -1,6 +1,6 @@
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
-CREATE TABLE IF NOT EXISTS seq (
+CREATE TABLE IF NOT EXISTS sequence (
 	seq BIGINT PRIMARY KEY,
 	id VARCHAR(128),
 	rev VARCHAR(64),
@@ -22,11 +22,11 @@ CREATE TABLE IF NOT EXISTS packages (
 	repositoryGithubOrg VARCHAR(64),
 	repositoryGithubRepo VARCHAR(64),
 	readmeFileName VARCHAR(256),
-	homepage VARCHAR(64),
-	bugsURL VARCHAR(128),
+	homepage VARCHAR(256),
+	bugsURL VARCHAR(256),
 	bugsEmail VARCHAR(128),
 	licenceType VARCHAR(64),
-	licenseURL VARCHAR(128),
+	licenseURL VARCHAR(256),
 	created TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
 	updated TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now()
 );
@@ -65,7 +65,7 @@ CREATE TABLE IF NOT EXISTS versionTime (
 CREATE TABLE IF NOT EXISTS npm (
   uuid UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   package UUID,
-  username VARCHAR(32),
+  username VARCHAR(64),
   liked BOOL,
   created TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
   updated TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now()
@@ -84,7 +84,7 @@ CREATE TABLE IF NOT EXISTS keywords (
 CREATE TABLE IF NOT EXISTS versions (	
   uuid UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   package UUID,
-	id VARCHAR(64), -- npm@1.1.25
+	id VARCHAR(128), -- npm@1.1.25
   version VARCHAR(128),
 	name VARCHAR(128),
 	description VARCHAR(256),
@@ -93,10 +93,10 @@ CREATE TABLE IF NOT EXISTS versions (
 	repositoryURL VARCHAR(256),
 	repositoryGithubOrg VARCHAR(64),
 	repositoryGithubRepo VARCHAR(64),
-	bugsURL VARCHAR(128),
+	bugsURL VARCHAR(256),
 	bugsEmail VARCHAR(128),
 	licenceType VARCHAR(64),
-	licenseURL VARCHAR(128),
+	licenseURL VARCHAR(256),
 	committerName VARCHAR(128),
 	committerEmail VARCHAR(128),
 	npmVersion VARCHAR(32),
