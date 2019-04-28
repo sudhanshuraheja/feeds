@@ -27,6 +27,6 @@ describe('Repo Seq', () => {
 
     await sequence.insert(1, 'id', 'rev')
     const result = await sequence.get(1)
-    expect(result.rows[0].id).toBe('id')
+    expect(result.rows[0].name).toBe('id')
   })
 })

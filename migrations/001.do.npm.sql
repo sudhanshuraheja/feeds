@@ -73,7 +73,7 @@ CREATE TABLE IF NOT EXISTS people (
   name VARCHAR(128),
 	version VARCHAR(128),
 	email VARCHAR(64),
-	name VARCHAR(64),
+	fullname VARCHAR(64),
 	url VARCHAR(64),
   type VARCHAR(16), -- author / maintainers / contributors
   created TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
@@ -116,4 +116,4 @@ CREATE TABLE IF NOT EXISTS dependencies (
   updated TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now()
 );
 
-CREATE UNIQUE INDEX IF NOT EXISTS dependencies_name_version_dependenct_idx ON keywords(name, version, dependency);
+CREATE UNIQUE INDEX IF NOT EXISTS dependencies_name_version_dependenct_idx ON dependencies(name, version, dependency);
