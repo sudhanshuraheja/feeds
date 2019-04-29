@@ -17,7 +17,7 @@ const replicate = {
         
     await replicate.initDb()
 
-    npm.start()
+    npm.start(replicate)
   },
 
   initDb: async () => {
