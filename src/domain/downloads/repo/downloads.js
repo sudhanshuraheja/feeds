@@ -23,8 +23,8 @@ const downloads = {
   insert: async (name, startTime, endTime, downloadCount) => {
     const schema = joi.object().keys({
       name: joi.string().max(128).required(),
-      startTime: joi.string().required(),
-      endTime: joi.string().required(),
+      startTime: joi.date().iso().required(),
+      endTime: joi.date().iso().required(),
       downloadCount: joi.number().min(0).required(),
     })
 

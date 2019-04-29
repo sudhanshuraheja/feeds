@@ -25,7 +25,7 @@ const times = {
     const schema = joi.object().keys({
       name: joi.string().max(128).required(),
       version: joi.string().max(64).required(),
-      time: joi.string().required(),
+      time: joi.date().iso().required(),
     })
 
     const validation = joi.validate({ name, version, time }, schema)
