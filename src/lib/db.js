@@ -81,7 +81,10 @@ const db = {
 
   truncate: async (table) => {
     try {
-      await db.query(`TRUNCATE ${table}`, [])
+      const exists = await db.tableExists(table)
+      if (exists) {
+        await db.query(`TRUNCATE ${table}`, [])
+      }
     } catch(err) {
       throw(new errors.PostgresQueryError(err))
     }
