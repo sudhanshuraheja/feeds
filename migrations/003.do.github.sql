@@ -1,6 +1,5 @@
 CREATE TABLE IF NOT EXISTS github (
   uuid UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  id UUID,
   name VARCHAR(128),
   avatarURL VARCHAR(128),
   description VARCHAR(512),
