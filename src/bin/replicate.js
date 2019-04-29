@@ -1,7 +1,9 @@
 const config = require('../lib/config')
-const logger = require('../lib/logger')('lib/replicate')
+const log = require('../lib/logger')
 const db = require('../lib/db')
 const npm = require('../domain/npm')
+
+const logger = log.init('lib/replicate')
 
 const replicate = {
   init: async () => {

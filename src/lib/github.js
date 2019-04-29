@@ -1,5 +1,7 @@
 const axios = require('axios')
-const logger = require('./logger')('domain/github')
+const log = require('./logger')
+
+const logger = log.init('domain/github')
 
 // Fetch data from this URL
 // https://api.github.com/repos/expressjs/express

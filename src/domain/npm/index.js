@@ -1,7 +1,9 @@
 /* eslint-disable no-underscore-dangle */
 const db = require('../../lib/npm')
 const repo = require('./repo')
-const logger = require('../../lib/logger')('domain/npm')
+const log = require('../../lib/logger')
+
+const logger = log.init('domain/npm')
 
 const fLogger = (item) => {
   // eslint-disable-next-line no-console
@@ -10,6 +12,8 @@ const fLogger = (item) => {
 
 const npm = {
   parent: null,
+  processed: 0,
+  processMax: 2,
 
   start: (parent) => {
     npm.parent = parent
@@ -36,8 +40,13 @@ const npm = {
     })
     npm.processTime(name, data.doc)
     
+    npm.processed += 1
+    if (npm.processed < npm.processMax) {
+      done()
+    } else {
+      npm.parent.release()
+    }
     // logger.info(data)
-    // done()
   },
 
   processSequence: async (seq, id, rev) => {

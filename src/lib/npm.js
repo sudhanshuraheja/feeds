@@ -1,6 +1,8 @@
 const couch = require('changes-stream')
 const backPressure = require('pressure-stream')
-const logger = require('./logger')('domain/npm')
+const log = require('./logger')
+
+const logger = log.init('domain/npm')
 
 // Fetch data from this URL
 // https://replicate.npmjs.com
