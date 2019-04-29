@@ -21,7 +21,7 @@ describe('Repo Seq', () => {
   test('Check insert', async () => {
     await expect(
       sequence.insert(-1, 'id', 'rev')
-    ).rejects.toThrow(/sequence/)
+    ).rejects.toThrow(/seq/)
 
     await sequence.insert(1, 'id', 'rev')
     const result = await sequence.get(1)

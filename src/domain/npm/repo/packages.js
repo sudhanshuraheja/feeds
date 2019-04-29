@@ -1,9 +1,16 @@
+const joi = require('joi')
 const db = require('../../../lib/db')
 
 const packages = {
   get: async (name) => {
-    if (typeof name !== 'string') throw new Error('[packages] name should be a string')
-    if (name.length > 128) throw new Error('[packages] name should be less than 128 chars')
+    const schema = joi.object().keys({
+      name: joi.string().max(128).required(),
+    })
+
+    const validation = joi.validate({ name }, schema)
+    if (validation.error) {
+      throw new Error(validation.error.details[0].message)
+    }
 
     try {
       const result = await db.query(`SELECT * FROM packages WHERE name=$1`, [name])
@@ -14,10 +21,30 @@ const packages = {
   },
 
   insert: async (name, rev, description, readme, timeModified, timeCreated, repositoryType, repositoryURL, repositoryGithubOrg, repositoryGithubRepo, readmeFileName, homepage, bugsURL, bugsEmail, licenceType, licenseURL, users) => {
-    if (typeof name !== 'string') throw new Error('[packages] name should be a string')
-    if (name.length > 128) throw new Error('[packages] name should be less than 128 chars')
-    if (typeof rev !== 'string') throw new Error('[packages] rev should be a string')
-    if (rev.length > 128) throw new Error('[packages] rev should be less than 128 chars')
+    const schema = joi.object().keys({
+      name: joi.string().max(128).required(),
+      rev: joi.string().max(128).required(),
+      description: joi.string().required(),
+      readme: joi.string().required(),
+      timeModified: joi.string().required(),
+      timeCreated: joi.string().required(),
+      repositoryType: joi.string().max(16).required(),
+      repositoryURL: joi.string().max(256).required(),
+      repositoryGithubOrg: joi.string().max(64).required(),
+      repositoryGithubRepo: joi.string().max(64).required(),
+      readmeFileName: joi.string().max(256).required(),
+      homepage: joi.string().max(256).required(),
+      bugsURL: joi.string().max(256).required(),
+      bugsEmail: joi.string().max(128).required(),
+      licenceType: joi.string().max(64).required(),
+      licenseURL: joi.string().max(256).required(),
+      users: joi.number().required(),
+    })
+
+    const validation = joi.validate({ name, rev, description, readme, timeModified, timeCreated, repositoryType, repositoryURL, repositoryGithubOrg, repositoryGithubRepo, readmeFileName, homepage, bugsURL, bugsEmail, licenceType, licenseURL, users }, schema)
+    if (validation.error) {
+      throw new Error(validation.error.details[0].message)
+    }
 
     try {
       const result = await db.query(`INSERT INTO packages(name, rev, description, readme, timeModified, timeCreated, repositoryType, repositoryURL, repositoryGithubOrg, repositoryGithubRepo, readmeFileName, homepage, bugsURL, bugsEmail, licenceType, licenseURL, users) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17) RETURNING *`, [name, rev, description, readme, timeModified, timeCreated, repositoryType, repositoryURL, repositoryGithubOrg, repositoryGithubRepo, readmeFileName, homepage, bugsURL, bugsEmail, licenceType, licenseURL, users])

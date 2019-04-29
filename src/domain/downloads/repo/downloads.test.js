@@ -21,7 +21,7 @@ describe('Repo Downloads', () => {
   test('Check insert', async () => {
     await expect(
       downloads.insert('name', 'startTime', 'endTime', 'downloadCount')
-    ).rejects.toThrow(/downloads/)
+    ).rejects.toThrow(/downloadCount/)
 
     const result = await downloads.insert('name', '2013-03-16T18:45:36.782Z', '2013-03-16T18:45:36.782Z', 24500)
     expect(result.rows[0].name).toBe('name')

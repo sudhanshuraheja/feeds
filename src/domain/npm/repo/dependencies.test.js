@@ -13,15 +13,15 @@ describe('Repo Dependencies', () => {
     await db.end()
   })
 
-  test('Check get', async () => {
-    const result = await dependencies.get('names', 'version')
+  test('Check depend get', async () => {
+    const result = await dependencies.get('name', 'version')
     expect(result.rows).toEqual([])
   })
 
   test('Check insert', async () => {
     await expect(
       dependencies.insert('name', 'version', 'dependency', 'semver', 'url', 'type')
-    ).rejects.toThrow(/dependencies/)
+    ).rejects.toThrow(/type/)
 
     const result = await dependencies.insert('name', 'version', 'dependency', 'semver', 'url', 'dep')
     expect(result.rows[0].name).toBe('name')

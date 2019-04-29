@@ -21,7 +21,7 @@ describe('Repo Github', () => {
   test('Check insert', async () => {
     await expect(
       github.insert('name', 'avatarURL', 'description', 'createdAt', 'updatedAt', 'pushedAt', 'homepage', 'size', 'stars', 'subscribers', 'forks', 'openIssueCount', 'language', 'licence', 'archived', 'disabled')
-    ).rejects.toThrow(/github/)
+    ).rejects.toThrow(/size/)
 
     const result = await github.insert('name', 'avatarURL', 'description', '2013-03-16T18:45:36.782Z', '2013-03-16T18:45:36.782Z', '2013-03-16T18:45:36.782Z', 'homepage', 2000, 5, 2, 2, 7, 'language', 'licence', false, false)
     expect(result.rows[0].name).toBe('name')

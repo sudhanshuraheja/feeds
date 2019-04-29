@@ -21,7 +21,7 @@ describe('Repo People', () => {
   test('Check insert', async () => {
     await expect(
       people.insert('name', 'version', 'email', 'fullname', 'url', 'type')
-    ).rejects.toThrow(/people/)
+    ).rejects.toThrow(/type/)
 
     const result = await people.insert('name', 'version', 'email', 'fullname', 'url', 'author')
     expect(result.rows[0].name).toBe('name')

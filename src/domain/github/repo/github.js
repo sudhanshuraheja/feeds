@@ -1,8 +1,16 @@
+const joi = require('joi')
 const db = require('../../../lib/db')
 
 const github = {
   get: async (uuid) => {
-    if (typeof uuid !== 'string') throw new Error('[github] uuid should be a string')
+    const schema = joi.object().keys({
+      uuid: joi.string().guid({ version: ['uuidv4'] }).required(),
+    })
+
+    const validation = joi.validate({ uuid }, schema)
+    if (validation.error) {
+      throw new Error(validation.error.details[0].message)
+    }
 
     try {
       const result = await db.query(`SELECT * FROM github WHERE uuid=$1`, [uuid])
@@ -13,33 +21,29 @@ const github = {
   },
 
   insert: async (name, avatarURL, description, createdAt, updatedAt, pushedAt, homepage, size, stars, subscribers, forks, openIssueCount, language, licence, archived, disabled) => {
-    if (typeof name !== 'string') throw new Error('[github] name should be a string')
-    if (name.length > 128) throw new Error('[github] name should be less than 128 chars')
-    if (typeof avatarURL !== 'string') throw new Error('[github] avatarURL should be a string')
-    if (avatarURL.length > 128) throw new Error('[github] avatarURL should be less than 128 chars')
-    if (typeof description !== 'string') throw new Error('[github] description should be a string')
-    if (description.length > 512) throw new Error('[github] description should be less than 128 chars')
-    if (typeof createdAt !== 'string') throw new Error('[github] createdAt should be a string')
-    if (typeof updatedAt !== 'string') throw new Error('[github] updatedAt should be a string')
-    if (typeof pushedAt !== 'string') throw new Error('[github] pushedAt should be a string')
-    if (typeof homepage !== 'string') throw new Error('[github] homepage should be a string')
-    if (homepage.length > 128) throw new Error('[github] homepage should be less than 128 chars')
-    if (!Number.isInteger(size)) throw new Error('[github] size should be an integer')
-    if (size < 0) throw new Error('[github] size should be greater than 0')
-    if (!Number.isInteger(stars)) throw new Error('[github] stars should be an integer')
-    if (stars < 0) throw new Error('[github] stars should be greater than 0')
-    if (!Number.isInteger(subscribers)) throw new Error('[github] subscribers should be an integer')
-    if (subscribers < 0) throw new Error('[github] subscribers should be greater than 0')
-    if (!Number.isInteger(forks)) throw new Error('[github] forks should be an integer')
-    if (forks < 0) throw new Error('[github] forks should be greater than 0')
-    if (!Number.isInteger(openIssueCount)) throw new Error('[github] openIssueCount should be an integer')
-    if (openIssueCount < 0) throw new Error('[github] openIssueCount should be greater than 0')
-    if (typeof language !== 'string') throw new Error('[github] language should be a string')
-    if (language.length > 32) throw new Error('[github] language should be less than 128 chars')
-    if (typeof licence !== 'string') throw new Error('[github] licence should be a string')
-    if (licence.length > 16) throw new Error('[github] licence should be less than 128 chars')
-    if (typeof archived !== 'boolean') throw new Error('[github] archived should be a bool')
-    if (typeof disabled !== 'boolean') throw new Error('[github] disabled should be a bool')
+    const schema = joi.object().keys({
+      name: joi.string().max(128).required(),
+      avatarURL: joi.string().max(128).required(),
+      description: joi.string().max(512).required(),
+      createdAt: joi.string().required(),
+      updatedAt: joi.string().required(),
+      pushedAt: joi.string().required(),
+      homepage: joi.string().max(128).required(),
+      size: joi.number().min(0).required(),
+      stars: joi.number().min(0).required(),
+      subscribers: joi.number().min(0).required(),
+      forks: joi.number().min(0).required(),
+      openIssueCount: joi.number().min(0).required(),
+      language: joi.string().max(32).required(),
+      licence: joi.string().max(16).required(),
+      archived: joi.bool().required(),
+      disabled: joi.bool().required(),
+    })
+
+    const validation = joi.validate({ name, avatarURL, description, createdAt, updatedAt, pushedAt, homepage, size, stars, subscribers, forks, openIssueCount, language, licence, archived, disabled }, schema)
+    if (validation.error) {
+      throw new Error(validation.error.details[0].message)
+    }
 
     try {
       const result = await db.query(`INSERT INTO github(name, avatarURL, description, createdAt, updatedAt, pushedAt, homepage, size, stars, subscribers, forks, openIssueCount, language, licence, archived, disabled) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16) RETURNING *`, [name, avatarURL, description, createdAt, updatedAt, pushedAt, homepage, size, stars, subscribers, forks, openIssueCount, language, licence, archived, disabled])

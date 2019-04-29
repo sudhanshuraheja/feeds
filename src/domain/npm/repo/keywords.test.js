@@ -21,7 +21,7 @@ describe('Repo Keywords', () => {
   test('Check insert', async () => {
     await expect(
       keywords.insert(1, 'version', 'keyword')
-    ).rejects.toThrow(/keywords/)
+    ).rejects.toThrow(/name/)
 
     const result = await keywords.insert('name', 'version', 'keyword')
     expect(result.rows[0].name).toBe('name')

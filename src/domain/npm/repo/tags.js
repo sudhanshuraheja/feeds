@@ -1,11 +1,17 @@
+const joi = require('joi')
 const db = require('../../../lib/db')
 
 const tags = {
   get: async (name, tag) => {
-    if (typeof name !== 'string') throw new Error('[tags] name should be a string')
-    if (name.length > 128) throw new Error('[tags] name should be less than 128 chars')
-    if (typeof tag !== 'string') throw new Error('[tags] tag should be a string')
-    if (tag.length > 64) throw new Error('[tags] tag should be less than 64 chars')
+    const schema = joi.object().keys({
+      name: joi.string().max(128).required(),
+      tag: joi.string().max(64).required(),
+    })
+
+    const validation = joi.validate({ name, tag }, schema)
+    if (validation.error) {
+      throw new Error(validation.error.details[0].message)
+    }
 
     try {
       const result = await db.query(`SELECT * FROM tags WHERE name=$1 AND tag=$2`, [name, tag])
@@ -16,12 +22,16 @@ const tags = {
   },
 
   insert: async (name, tag, version) => {
-    if (typeof name !== 'string') throw new Error('[tags] name should be a string')
-    if (name.length > 128) throw new Error('[tags] name should be less than 128 chars')
-    if (typeof tag !== 'string') throw new Error('[tags] tag should be a string')
-    if (tag.length > 64) throw new Error('[tags] tag should be less than 64 chars')
-    if (typeof version !== 'string') throw new Error('[tags] version should be a string')
-    if (version.length > 64) throw new Error('[tags] version should be less than 64 chars')
+    const schema = joi.object().keys({
+      name: joi.string().max(128).required(),
+      tag: joi.string().max(64).required(),
+      version: joi.string().max(64).required(),
+    })
+
+    const validation = joi.validate({ name, tag, version }, schema)
+    if (validation.error) {
+      throw new Error(validation.error.details[0].message)
+    }
 
     try {
       const result = await db.query(`INSERT INTO tags(name, tag, version) VALUES($1, $2, $3) RETURNING *`, [name, tag, version])

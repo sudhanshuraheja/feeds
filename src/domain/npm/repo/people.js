@@ -1,11 +1,17 @@
+const joi = require('joi')
 const db = require('../../../lib/db')
 
 const people = {
   get: async (name, version) => {
-    if (typeof name !== 'string') throw new Error('[people] name should be a string')
-    if (name.length > 128) throw new Error('[people] name should be less than 128 chars')
-    if (typeof version !== 'string') throw new Error('[people] version should be a string')
-    if (version.length > 64) throw new Error('[people] version should be less than 64 chars')
+    const schema = joi.object().keys({
+      name: joi.string().max(128).required(),
+      version: joi.string().max(64).required(),
+    })
+
+    const validation = joi.validate({ name, version }, schema)
+    if (validation.error) {
+      throw new Error(validation.error.details[0].message)
+    }
 
     try {
       const result = await db.query(`SELECT * FROM people WHERE name=$1 AND version=$2`, [name, version])
@@ -16,20 +22,19 @@ const people = {
   },
 
   insert: async (name, version, email, fullname, url, type) => {
-    if (typeof name !== 'string') throw new Error('[people] name should be a string')
-    if (name.length > 128) throw new Error('[people] name should be less than 128 chars')
-    if (typeof version !== 'string') throw new Error('[people] version should be a string')
-    if (version.length > 128) throw new Error('[people] version should be less than 128 chars')
-    if (typeof email !== 'string') throw new Error('[people] email should be a string')
-    if (email.length > 64) throw new Error('[people] email should be less than 64 chars')
-    if (typeof fullname !== 'string') throw new Error('[people] fullname should be a string')
-    if (fullname.length > 64) throw new Error('[people] fullname should be less than 64 chars')
-    if (typeof url !== 'string') throw new Error('[people] url should be a string')
-    if (url.length > 64) throw new Error('[people] url should be less than 64 chars')
-    if (typeof type !== 'string') throw new Error('[people] type should be a string')
-    if (type.length > 16) throw new Error('[people] type should be less than 16 chars')
-    const typeAllowed = ['author', 'maintainers', 'contributors']
-    if (!typeAllowed.includes(type)) throw new Error('[people] type should be in author/maintainers/contributors')
+    const schema = joi.object().keys({
+      name: joi.string().max(128).required(),
+      version: joi.string().max(128).required(),
+      email: joi.string().max(64).required(),
+      fullname: joi.string().max(64).required(),
+      url: joi.string().max(64).required(),
+      type: joi.string().max(16).valid('author', 'maintainers', 'contributors')
+    })
+
+    const validation = joi.validate({ name, version, email, fullname, url, type }, schema)
+    if (validation.error) {
+      throw new Error(validation.error.details[0].message)
+    }
 
     try {
       const result = await db.query(`INSERT INTO people(name, version, email, fullname, url, type) VALUES($1, $2, $3, $4, $5, $6) RETURNING *`, [name, version, email, fullname, url, type])

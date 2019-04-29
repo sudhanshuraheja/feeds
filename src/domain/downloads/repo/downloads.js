@@ -1,8 +1,16 @@
+const joi = require('joi')
 const db = require('../../../lib/db')
 
 const downloads = {
   get: async (uuid) => {
-    if (typeof uuid !== 'string') throw new Error('[downloads] uuid should be a string')
+    const schema = joi.object().keys({
+      uuid: joi.string().guid({ version: ['uuidv4'] }).required(),
+    })
+
+    const validation = joi.validate({ uuid }, schema)
+    if (validation.error) {
+      throw new Error(validation.error.details[0].message)
+    }
 
     try {
       const result = await db.query(`SELECT * FROM downloads WHERE uuid=$1`, [uuid])
@@ -13,13 +21,17 @@ const downloads = {
   },
 
   insert: async (name, startTime, endTime, downloadCount) => {
-    if (typeof name !== 'string') throw new Error('[downloads] name should be a string')
-    if (name.length > 128) throw new Error('[downloads] name should be less than 128 chars')
-    if (typeof startTime !== 'string') throw new Error('[downloads] startTime should be a string')
-    if (typeof endTime !== 'string') throw new Error('[downloads] endTime should be a string')
-    if (!Number.isInteger(downloadCount)) throw new Error('[downloads] downloadCount should be an integer')
-    if (downloadCount < 0) throw new Error('[downloads] downloadCount should be greater than 0')
+    const schema = joi.object().keys({
+      name: joi.string().max(128).required(),
+      startTime: joi.string().required(),
+      endTime: joi.string().required(),
+      downloadCount: joi.number().min(0).required(),
+    })
 
+    const validation = joi.validate({ name, startTime, endTime, downloadCount }, schema)
+    if (validation.error) {
+      throw new Error(validation.error.details[0].message)
+    }
 
     try {
       const result = await db.query(`INSERT INTO downloads(name, startTime, endTime, downloads) VALUES($1, $2, $3, $4) RETURNING *`, [name, startTime, endTime, downloadCount])

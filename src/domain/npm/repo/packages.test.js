@@ -23,7 +23,7 @@ describe('Repo Packages', () => {
     const now = moment().format()
     await expect(
       packages.insert(-1, 'pkg-rev', 'long description', '#readme', now, now, 'git', 'git://url', 'org', 'repo', 'readme.md', 'https://homepage.org', 'http://bugs.org', 'bugs@org.com', 'MIT', 'http://license.org', 15)
-    ).rejects.toThrow(/packages/)
+    ).rejects.toThrow(/name/)
 
     const updated = moment('2013-03-16T18:45:36.782Z').format()
     await packages.insert('pkg-name', 'pkg-rev', 'long description', '#readme', now, updated, 'git', 'git://url', 'org', 'repo', 'readme.md', 'https://homepage.org', 'http://bugs.org', 'bugs@org.com', 'MIT', 'http://license.org', 15)

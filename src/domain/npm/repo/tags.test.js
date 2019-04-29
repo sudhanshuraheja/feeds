@@ -21,7 +21,7 @@ describe('Repo Tags', () => {
   test('Check insert', async () => {
     await expect(
       tags.insert(1, 'tag', 'version')
-    ).rejects.toThrow(/tags/)
+    ).rejects.toThrow(/name/)
 
     const result = await tags.insert('name', 'tag', 'version')
     expect(result.rows[0].name).toBe('name')

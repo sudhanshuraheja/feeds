@@ -1,11 +1,17 @@
+const joi = require('joi')
 const db = require('../../../lib/db')
 
 const times = {
   get: async (name, version) => {
-    if (typeof name !== 'string') throw new Error('[times] name should be a string')
-    if (name.length > 128) throw new Error('[times] name should be less than 128 chars')
-    if (typeof version !== 'string') throw new Error('[times] version should be a string')
-    if (version.length > 64) throw new Error('[times] version should be less than 64 chars')
+    const schema = joi.object().keys({
+      name: joi.string().max(128).required(),
+      version: joi.string().max(64).required(),
+    })
+
+    const validation = joi.validate({ name, version }, schema)
+    if (validation.error) {
+      throw new Error(validation.error.details[0].message)
+    }
 
     try {
       const result = await db.query(`SELECT * FROM times WHERE name=$1 AND version=$2`, [name, version])
@@ -16,11 +22,16 @@ const times = {
   },
 
   insert: async (name, version, time) => {
-    if (typeof name !== 'string') throw new Error('[times] name should be a string')
-    if (name.length > 128) throw new Error('[times] name should be less than 128 chars')
-    if (typeof version !== 'string') throw new Error('[times] version should be a string')
-    if (version.length > 64) throw new Error('[times] version should be less than 64 chars')
-    if (typeof time !== 'string') throw new Error('[times] time should be a string')
+    const schema = joi.object().keys({
+      name: joi.string().max(128).required(),
+      version: joi.string().max(64).required(),
+      time: joi.string().required(),
+    })
+
+    const validation = joi.validate({ name, version, time }, schema)
+    if (validation.error) {
+      throw new Error(validation.error.details[0].message)
+    }
 
     try {
       const result = await db.query(`INSERT INTO times(name, version, time) VALUES($1, $2, $3) RETURNING *`, [name, version, time])

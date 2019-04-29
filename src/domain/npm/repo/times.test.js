@@ -21,7 +21,7 @@ describe('Repo Times', () => {
   test('Check insert', async () => {
     await expect(
       times.insert(0, 'version', '2013-03-16T18:45:36.782Z')
-    ).rejects.toThrow(/times/)
+    ).rejects.toThrow(/name/)
 
     const result = await times.insert('name', 'version', '2013-03-16T18:45:36.782Z')
     expect(result.rows[0].name).toBe('name')
