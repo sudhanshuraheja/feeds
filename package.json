@@ -40,6 +40,6 @@
   },
   "scripts": {
     "start": "node app.js",
-    "test": "jest --detectOpenHandles"
+    "test": "jest --detectOpenHandles --runInBand"
   }
 }
