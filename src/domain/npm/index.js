@@ -50,8 +50,14 @@ const npm = {
   },
 
   processPackage: async (name, rev, doc) => {
+    const repositoryType = doc.repository ? doc.repository.type : undefined
+    const repositoryURL = doc.repository ? doc.repository.url : undefined
+    const bugsURL = doc.bugs ? doc.bugs.url : undefined
+    const bugsEmail = doc.bugs ? doc.bugs.email : undefined
+    const {githubOrg, githubRepo} = npm.splitGithubURL(doc.repository ? doc.repository.url : undefined)
+    const {licenceType, licenceURL} = npm.splitLicense(doc.license, doc.licenses)
     try {
-      await repo.packages.insert(name, rev, doc.description, doc.readme, doc.time.modified, doc.time.created, doc.repositoryType, doc.repositoryURL, doc.repositoryGithubOrg, doc.repositoryGithubRepo, doc.readmeFileName, doc.homepage, doc.bugsURL, doc.bugsEmail, doc.licenceType, doc.licenceURL, doc.users)
+      await repo.packages.insert(name, rev, doc.description, doc.readme, doc.time.modified, doc.time.created, repositoryType, repositoryURL, githubOrg, githubRepo, doc.readmeFileName, doc.homepage, bugsURL, bugsEmail, licenceType, licenceURL, doc.users)
     } catch(err) {
       logger.error(err)
       npm.parent.release()
@@ -168,7 +174,27 @@ const npm = {
         }
       }
     })
+  },
 
+  splitGithubURL: (url) => {
+    const git = { githubOrg: undefined, githubRepo: undefined }
+    if (url) {
+      const split = url.split('/')
+      git.githubOrg = split[split.length - 2]
+      git.githubRepo = split[split.length - 1].replace('.git', '')
+    }
+    return git
+  },
+
+  splitLicense: (license, licenses) => {
+    const info = { licenceType: undefined, licenceURL: undefined }
+    if (license) {
+      info.licenceType = license
+    } else if (licenses && licenses[0] && licenses[0].type) {
+      info.licenceType = licenses[0].type
+      info.licenceURL = licenses[0].url
+    }
+    return info
   }
 
 }
