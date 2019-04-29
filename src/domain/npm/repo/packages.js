@@ -14,8 +14,6 @@ const packages = {
   },
 
   insert: async (name, rev, description, readme, timeModified, timeCreated, repositoryType, repositoryURL, repositoryGithubOrg, repositoryGithubRepo, readmeFileName, homepage, bugsURL, bugsEmail, licenceType, licenseURL, users) => {
-    // if (!Number.isInteger(seq)) throw new Error('[packages] seq should be an integer')
-    // if (seq <= 0) throw new Error('[packages] seq should be greater than 0')
     if (typeof name !== 'string') throw new Error('[packages] name should be a string')
     if (name.length > 128) throw new Error('[packages] name should be less than 128 chars')
     if (typeof rev !== 'string') throw new Error('[packages] rev should be a string')

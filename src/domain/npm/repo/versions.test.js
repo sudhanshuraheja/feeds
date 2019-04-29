@@ -19,11 +19,9 @@ describe('Repo Versions', () => {
   })
 
   test('Check insert', async () => {
-    try {
-      await versions.insert(null, 'pkg-name', '1.1.1', 'long description', '# homepage', 'git', 'http://github.com', 'org', 'repo', 'http://bugs.org', 'bugs@org.com', 'MIT', 'http://license.org', 'ms committer', 'ms.committer@org.com', '1.0.0', '7.0.0', 'abcdefghijklmnop', 'https://tar.org/tar', 'this is not deprecated')
-    } catch (err) {
-      expect(err.toString()).toMatch(/[sequence]/)
-    }
+    await expect(
+      versions.insert(null, 'pkg-name', '1.1.1', 'long description', '# homepage', 'git', 'http://github.com', 'org', 'repo', 'http://bugs.org', 'bugs@org.com', 'MIT', 'http://license.org', 'ms committer', 'ms.committer@org.com', '1.0.0', '7.0.0', 'abcdefghijklmnop', 'https://tar.org/tar', 'this is not deprecated')
+    ).rejects.toThrow(/versions/)
 
     await versions.insert('npm@1.1.1', 'pkg-name', '1.1.1', 'long description', '# homepage', 'git', 'http://github.com', 'org', 'repo', 'http://bugs.org', 'bugs@org.com', 'MIT', 'http://license.org', 'ms committer', 'ms.committer@org.com', '1.0.0', '7.0.0', 'abcdefghijklmnop', 'https://tar.org/tar', 'this is not deprecated')
     const result = await versions.get('npm@1.1.1')
