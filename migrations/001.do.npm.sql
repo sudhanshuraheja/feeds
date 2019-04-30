@@ -80,7 +80,7 @@ CREATE TABLE IF NOT EXISTS people (
   updated TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now()
 );
 
-CREATE UNIQUE INDEX IF NOT EXISTS people_name_version_fullname_email_type_idx ON people(name, version, fullname, email, type);
+CREATE UNIQUE INDEX IF NOT EXISTS people_name_version_fullname_email_url_type_idx ON people(name, version, fullname, email, url, type);
 
 CREATE TABLE IF NOT EXISTS times (
 	uuid UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
