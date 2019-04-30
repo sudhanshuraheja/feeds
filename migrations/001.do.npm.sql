@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS packages (
 	readme TEXT,
 	timeModified TIMESTAMP WITH TIME ZONE,
 	timeCreated TIMESTAMP WITH TIME ZONE,
-	repositoryType VARCHAR(16),
+	repositoryType VARCHAR(128),
 	repositoryURL VARCHAR(256),
 	repositoryGithubOrg VARCHAR(64),
 	repositoryGithubRepo VARCHAR(64),
@@ -36,7 +36,7 @@ CREATE TABLE IF NOT EXISTS versions (
   version VARCHAR(128), -- 1.1.25
 	description TEXT,
 	homepage VARCHAR(256),
-	repositoryType VARCHAR(16),
+	repositoryType VARCHAR(128),
 	repositoryURL VARCHAR(256),
 	repositoryGithubOrg VARCHAR(64),
 	repositoryGithubRepo VARCHAR(64),

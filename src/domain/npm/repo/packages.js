@@ -31,7 +31,7 @@ const packages = {
       readme: joi.string().allow('').optional(),
       timeModified: joi.date().iso().required(),
       timeCreated: joi.date().iso().required(),
-      repositoryType: joi.string().max(16).optional(),
+      repositoryType: joi.string().max(128).optional(),
       repositoryURL: joi.string().max(256).optional(),
       repositoryGithubOrg: joi.string().max(64).optional(),
       repositoryGithubRepo: joi.string().max(64).optional(),
