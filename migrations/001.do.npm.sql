@@ -74,7 +74,7 @@ CREATE TABLE IF NOT EXISTS people (
 	version VARCHAR(128),
 	email VARCHAR(64),
 	fullname VARCHAR(256),
-	url VARCHAR(64),
+	url VARCHAR(256),
   type VARCHAR(16), -- author / maintainers / contributors
   created TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
   updated TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now()

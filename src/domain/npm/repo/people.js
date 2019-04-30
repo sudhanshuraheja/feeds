@@ -30,7 +30,7 @@ const people = {
       version: joi.string().max(128).required(),
       email: joi.string().max(64).allow('').optional(),
       fullname: joi.string().max(256).allow('').required(),
-      url: joi.string().max(64).allow('').optional(),
+      url: joi.string().max(256).allow('').optional(),
       type: joi.string().max(16).valid('author', 'maintainer', 'contributor')
     })
 
