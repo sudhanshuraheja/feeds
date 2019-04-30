@@ -59,8 +59,8 @@ const npm = {
   },
 
   processPackage: async (name, rev, doc) => {
-    const repositoryType = (doc.repository && doc.repository.type.length > 0) ? doc.repository.type : undefined
-    const repositoryURL = (doc.repository && doc.repository.url.length > 0) ? doc.repository.url : undefined
+    const repositoryType = (doc.repository && doc.repository.type && doc.repository.type.length > 0) ? doc.repository.type : undefined
+    const repositoryURL = (doc.repository && doc.repository.url && doc.repository.url.length > 0) ? doc.repository.url : undefined
     const bugsURL = doc.bugs ? doc.bugs.url : undefined
     const bugsEmail = doc.bugs ? doc.bugs.email : undefined
     const {githubOrg, githubRepo} = npm.splitGithubURL(doc.repository ? doc.repository.url : undefined)
@@ -88,8 +88,8 @@ const npm = {
 
   processVersion: async (details) => {
     try {
-      const repositoryType = (details.repository && details.repository.type.length > 0) ? details.repository.type : undefined
-      const repositoryURL = (details.repository && details.repository.url.length > 0) ? details.repository.url : undefined
+      const repositoryType = (details.repository && details.repository.type && details.repository.type.length > 0) ? details.repository.type : undefined
+      const repositoryURL = (details.repository && details.repository.url && details.repository.url.length > 0) ? details.repository.url : undefined
       const bugsURL = details.bugs ? details.bugs.url : undefined
       const bugsEmail = details.bugs ? details.bugs.email : undefined
       const {githubOrg, githubRepo} = npm.splitGithubURL(details.repository ? details.repository.url : undefined)
