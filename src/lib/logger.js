@@ -8,8 +8,6 @@ const logger = {
 
     config.init()
     
-    // eslint-disable-next-line no-console
-    console.log(`Starting logger with logLevel ${config.env.LOG_LEVEL}`)
     // eslint-disable-next-line new-cap
     logger.log = new createLogger({
       level: config.env.LOG_LEVEL,
@@ -28,6 +26,8 @@ const logger = {
       ],
       exitOnError: false
     })
+
+    logger.log.info(`Starting logger with logLevel ${config.env.LOG_LEVEL}`)
 
     return logger.log
   }
