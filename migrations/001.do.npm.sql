@@ -73,7 +73,7 @@ CREATE TABLE IF NOT EXISTS people (
   name VARCHAR(128),
 	version VARCHAR(128),
 	email VARCHAR(64),
-	fullname VARCHAR(64),
+	fullname VARCHAR(256),
 	url VARCHAR(64),
   type VARCHAR(16), -- author / maintainers / contributors
   created TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),

@@ -29,7 +29,7 @@ const people = {
       name: joi.string().max(128).required(),
       version: joi.string().max(128).required(),
       email: joi.string().max(64).allow('').optional(),
-      fullname: joi.string().max(64).allow('').required(),
+      fullname: joi.string().max(256).allow('').required(),
       url: joi.string().max(64).allow('').optional(),
       type: joi.string().max(16).valid('author', 'maintainer', 'contributor')
     })
