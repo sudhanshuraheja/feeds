@@ -15,17 +15,20 @@ describe('Domain NPM', () => {
   test('Check licences', () => {
     const license1 = "MIT"
     const license2 = "Apache, Version 2.0"
-    const licenses1 = [{ "type": "MIT", "url": "http://lodash.com/license" }]
-    const licenses2 = [{ "type": "MIT +no-false-attribs", "url": "https://github.com/isaacs/npm/raw/master/LICENSE" }]
+    const license3 = [{ "type": "MIT", "url": "http://lodash.com/license" }]
+    const license4 = [{ "type": "MIT +no-false-attribs", "url": "https://github.com/isaacs/npm/raw/master/LICENSE" }]
+    const license5 = { "type": "MIT", "url": "https://github.com/bradmartin/nativescript-panorama-imageview/blob/master/LICENSE"}
 
-    expect(repo.splitLicense(license1, undefined).licenceType).toBe("MIT")
-    expect(repo.splitLicense(license1, undefined).licenceURL).toBe(undefined)
-    expect(repo.splitLicense(license2, undefined).licenceType).toBe("Apache, Version 2.0")
-    expect(repo.splitLicense(license2, undefined).licenceURL).toBe(undefined)
-    expect(repo.splitLicense(undefined, licenses1).licenceType).toBe("MIT")
-    expect(repo.splitLicense(undefined, licenses1).licenceURL).toBe("http://lodash.com/license")
-    expect(repo.splitLicense(undefined, licenses2).licenceType).toBe("MIT +no-false-attribs")
-    expect(repo.splitLicense(undefined, licenses2).licenceURL).toBe("https://github.com/isaacs/npm/raw/master/LICENSE")
+    expect(repo.splitLicense(license1).licenceType).toBe("MIT")
+    expect(repo.splitLicense(license1).licenceURL).toBe(undefined)
+    expect(repo.splitLicense(license2).licenceType).toBe("Apache, Version 2.0")
+    expect(repo.splitLicense(license2).licenceURL).toBe(undefined)
+    expect(repo.splitLicense(license3).licenceType).toBe("MIT")
+    expect(repo.splitLicense(license3).licenceURL).toBe("http://lodash.com/license")
+    expect(repo.splitLicense(license4).licenceType).toBe("MIT +no-false-attribs")
+    expect(repo.splitLicense(license4).licenceURL).toBe("https://github.com/isaacs/npm/raw/master/LICENSE")
+    expect(repo.splitLicense(license5).licenceType).toBe("MIT")
+    expect(repo.splitLicense(license5).licenceURL).toBe("https://github.com/bradmartin/nativescript-panorama-imageview/blob/master/LICENSE")
   })
 
   test('Check split person', () => {

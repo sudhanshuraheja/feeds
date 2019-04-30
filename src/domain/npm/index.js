@@ -251,13 +251,18 @@ const npm = {
     return git
   },
 
-  splitLicense: (license, licenses) => {
+  splitLicense: (license) => {
     const info = { licenceType: undefined, licenceURL: undefined }
-    if (license) {
+    if (Array.isArray(license)) {
+      if (license && license[0] && license[0].type) {
+        info.licenceType = license[0].type
+        info.licenceURL = license[0].url  
+      }
+    } else if (typeof license === 'object') {
+      info.licenceType = license.type
+      info.licenceURL = license.url
+    } else if (typeof license === 'string') {
       info.licenceType = license
-    } else if (licenses && licenses[0] && licenses[0].type) {
-      info.licenceType = licenses[0].type
-      info.licenceURL = licenses[0].url
     }
     return info
   }
