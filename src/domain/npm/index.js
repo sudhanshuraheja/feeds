@@ -262,7 +262,9 @@ const npm = {
       info.licenceType = license.type
       info.licenceURL = license.url
     } else if (typeof license === 'string') {
-      info.licenceType = license
+      if (license !== '') {
+        info.licenceType = license
+      }
     }
     return info
   }

@@ -18,6 +18,7 @@ describe('Domain NPM', () => {
     const license3 = [{ "type": "MIT", "url": "http://lodash.com/license" }]
     const license4 = [{ "type": "MIT +no-false-attribs", "url": "https://github.com/isaacs/npm/raw/master/LICENSE" }]
     const license5 = { "type": "MIT", "url": "https://github.com/bradmartin/nativescript-panorama-imageview/blob/master/LICENSE"}
+    const license6 = ""
 
     expect(repo.splitLicense(license1).licenceType).toBe("MIT")
     expect(repo.splitLicense(license1).licenceURL).toBe(undefined)
@@ -29,6 +30,8 @@ describe('Domain NPM', () => {
     expect(repo.splitLicense(license4).licenceURL).toBe("https://github.com/isaacs/npm/raw/master/LICENSE")
     expect(repo.splitLicense(license5).licenceType).toBe("MIT")
     expect(repo.splitLicense(license5).licenceURL).toBe("https://github.com/bradmartin/nativescript-panorama-imageview/blob/master/LICENSE")
+    expect(repo.splitLicense(license6).licenceType).toBe(undefined)
+    expect(repo.splitLicense(license6).licenceURL).toBe(undefined)
   })
 
   test('Check split person', () => {
