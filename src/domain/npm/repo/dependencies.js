@@ -1,5 +1,8 @@
 const joi = require('joi')
 const db = require('../../../lib/db')
+const log = require('../../../lib/logger')
+
+const logger = log.init('npm/repo/dependencies')
 
 const dependencies = {
   get: async (name, version) => {
@@ -26,14 +29,15 @@ const dependencies = {
       name: joi.string().max(128).required(),
       version: joi.string().max(64).required(),
       dependency: joi.string().max(128).required(),
-      semver: joi.string().max(64).required(),
-      url: joi.string().max(128).required(),
+      semver: joi.string().max(256).allow('').optional(),
+      url: joi.string().max(128).allow('').optional(),
       type: joi.string().max(128).valid('dep', 'bundle', 'dev', 'optional')
     })
 
     const validation = joi.validate({ name, version, dependency, semver, url, type }, schema)
     if (validation.error) {
-      throw new Error(validation.error.details[0].message)
+      logger.debug(`Dependencies: ${name}, ${version}, ${dependency}, ${semver}, ${url}, ${type}`)
+      throw new Error(`Dependencies: ${validation.error.details[0].message}`)
     }
 
     try {

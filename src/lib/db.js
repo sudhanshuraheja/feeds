@@ -42,7 +42,7 @@ const db = {
       logger.debug(`Executed Query: ${text}, duration: ${duration}ms, rows: ${result.rows.length}, pool total:${pool.totalCount}, idle:${pool.idleCount}, waiting:${pool.waitingCount}`)
       return result  
     } catch(err) {
-      logger.error(`Query Failed: ${text}, pool total:${pool.totalCount}, idle:${pool.idleCount}, waiting:${pool.waitingCount}`)
+      logger.error(`Query Failed: <${text}> with params [${params.join(', ')}] with error <${err.toString()}>, pool total:${pool.totalCount}, idle:${pool.idleCount}, waiting:${pool.waitingCount}`)
       throw(new errors.PostgresQueryError(err))
     }
   },

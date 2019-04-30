@@ -1,5 +1,8 @@
 const joi = require('joi')
 const db = require('../../../lib/db')
+const log = require('../../../lib/logger')
+
+const logger = log.init('npm/repo/packages')
 
 const packages = {
   get: async (name) => {
@@ -24,8 +27,8 @@ const packages = {
     const schema = joi.object().keys({
       name: joi.string().max(128).required(),
       rev: joi.string().max(128).required(),
-      description: joi.string().required(),
-      readme: joi.string().required(),
+      description: joi.string().allow('').optional(),
+      readme: joi.string().allow('').optional(),
       timeModified: joi.date().iso().required(),
       timeCreated: joi.date().iso().required(),
       repositoryType: joi.string().max(16).optional(),
@@ -43,7 +46,8 @@ const packages = {
 
     const validation = joi.validate({ name, rev, description, readme, timeModified, timeCreated, repositoryType, repositoryURL, repositoryGithubOrg, repositoryGithubRepo, readmeFileName, homepage, bugsURL, bugsEmail, licenceType, licenseURL, users }, schema)
     if (validation.error) {
-      throw new Error(validation.error.details[0].message)
+      logger.debug(`Packages: ${name}, ${rev}, ${description}, ${readme}, ${timeModified}, ${timeCreated}, ${repositoryType}, ${repositoryURL}, ${repositoryGithubOrg}, ${repositoryGithubRepo}, ${readmeFileName}, ${homepage}, ${bugsURL}, ${bugsEmail}, ${licenceType}, ${licenseURL}, ${users}`)
+      throw new Error(`Packages: ${validation.error.details[0].message}`)
     }
 
     try {

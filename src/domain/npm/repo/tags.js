@@ -1,5 +1,8 @@
 const joi = require('joi')
 const db = require('../../../lib/db')
+const log = require('../../../lib/logger')
+
+const logger = log.init('repo/npm/tags')
 
 const tags = {
   get: async (name, tag) => {
@@ -30,7 +33,8 @@ const tags = {
 
     const validation = joi.validate({ name, tag, version }, schema)
     if (validation.error) {
-      throw new Error(validation.error.details[0].message)
+      logger.debug(`Tags: ${name}, ${tag}, ${version}`)
+      throw new Error(`Tags: ${validation.error.details[0].message}`)
     }
 
     try {

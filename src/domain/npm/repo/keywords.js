@@ -1,5 +1,8 @@
 const joi = require('joi')
 const db = require('../../../lib/db')
+const log = require('../../../lib/logger')
+
+const logger = log.init('npm/repo/keywords')
 
 const keywords = {
   get: async (name, version) => {
@@ -30,7 +33,8 @@ const keywords = {
 
     const validation = joi.validate({ name, version, keyword }, schema)
     if (validation.error) {
-      throw new Error(validation.error.details[0].message)
+      logger.debug(`Keywords: ${name}, ${version}, ${keyword}`)
+      throw new Error(`Keywords: ${validation.error.details[0].message}`)
     }
 
     try {

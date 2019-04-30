@@ -1,5 +1,8 @@
 const joi = require('joi')
 const db = require('../../../lib/db')
+const log = require('../../../lib/logger')
+
+const logger = log.init('repo/npm/versions')
 
 const versions = {
   get: async (id) => {
@@ -25,28 +28,29 @@ const versions = {
       id: joi.string().max(128).required(),
       name: joi.string().max(128).required(),
       version: joi.string().max(128).required(),
-      description: joi.string().max(256).required(),
-      homepage: joi.string().max(256).required(),
+      description: joi.string().allow('').optional(),
+      homepage: joi.string().max(256).optional(),
       repositoryType: joi.string().max(16).optional(),
       repositoryURL: joi.string().max(256).optional(),
-      repositoryGithubOrg: joi.string().max(64).optional(),
-      repositoryGithubRepo: joi.string().max(64).optional(),
+      repositoryGithubOrg: joi.string().max(64).allow('').optional(),
+      repositoryGithubRepo: joi.string().max(64).allow('').optional(),
       bugsURL: joi.string().max(256).optional(),
       bugsEmail: joi.string().max(128).optional(),
       licenceType: joi.string().max(64).optional(),
       licenseURL: joi.string().max(256).optional(),
       committerName: joi.string().max(128).required(),
       committerEmail: joi.string().max(128).required(),
-      npmVersion: joi.string().max(32).required(),
-      nodeVersion: joi.string().max(32).required(),
-      distShasum: joi.string().max(64).required(),
-      distTarball: joi.string().max(256).required(),
-      deprecated: joi.string().max(256).required(),
+      npmVersion: joi.string().max(32).optional(),
+      nodeVersion: joi.string().max(32).optional(),
+      distShasum: joi.string().max(64).optional(),
+      distTarball: joi.string().max(256).optional(),
+      deprecated: joi.string().max(256).optional(),
     })
 
     const validation = joi.validate({ id, name, version, description, homepage, repositoryType, repositoryURL, repositoryGithubOrg, repositoryGithubRepo, bugsURL, bugsEmail, licenceType, licenseURL, committerName, committerEmail, npmVersion, nodeVersion, distShasum, distTarball, deprecated }, schema)
     if (validation.error) {
-      throw new Error(validation.error.details[0].message)
+      logger.debug(`Versions: ${id}, ${name}, ${version}, ${description}, ${homepage}, ${repositoryType}, ${repositoryURL}, ${repositoryGithubOrg}, ${repositoryGithubRepo}, ${bugsURL}, ${bugsEmail}, ${licenceType}, ${licenseURL}, ${committerName}, ${committerEmail}, ${npmVersion}, ${nodeVersion}, ${distShasum}, ${distTarball}, ${deprecated}`)
+      throw new Error(`Versions: ${validation.error.details[0].message}`)
     }
 
     try {

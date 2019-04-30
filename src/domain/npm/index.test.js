@@ -27,4 +27,19 @@ describe('Domain NPM', () => {
     expect(repo.splitLicense(undefined, licenses2).licenceType).toBe("MIT +no-false-attribs")
     expect(repo.splitLicense(undefined, licenses2).licenceURL).toBe("https://github.com/isaacs/npm/raw/master/LICENSE")
   })
+
+  test('Check split person', () => {
+    const person1 = { "name": "npm", "email": "npm@npmjs.com" }
+    const person2 = "Azer Koçulu <azer@kodfabrik.com>"
+    const person3 = ""
+    expect(repo.splitPerson(person1).email).toBe("npm@npmjs.com")
+    expect(repo.splitPerson(person1).url).toBe('')
+    expect(repo.splitPerson(person1).fullname).toBe("npm")
+    expect(repo.splitPerson(person2).email).toBe("azer@kodfabrik.com")
+    expect(repo.splitPerson(person2).url).toBe('')
+    expect(repo.splitPerson(person2).fullname).toBe("Azer Koçulu")
+    expect(repo.splitPerson(person3).email).toBe('')
+    expect(repo.splitPerson(person3).url).toBe('')
+    expect(repo.splitPerson(person3).fullname).toBe('')
+  })
 })

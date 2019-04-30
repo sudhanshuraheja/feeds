@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS versions (
 	id VARCHAR(128) PRIMARY KEY, -- npm@1.1.25
 	name VARCHAR(128), -- npm
   version VARCHAR(128), -- 1.1.25
-	description VARCHAR(256),
+	description TEXT,
 	homepage VARCHAR(256),
 	repositoryType VARCHAR(16),
 	repositoryURL VARCHAR(256),
@@ -80,7 +80,7 @@ CREATE TABLE IF NOT EXISTS people (
   updated TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now()
 );
 
-CREATE UNIQUE INDEX IF NOT EXISTS people_name_version_idx ON people(name, version);
+CREATE UNIQUE INDEX IF NOT EXISTS people_name_version_fullname_type_idx ON people(name, version, fullname, type);
 
 CREATE TABLE IF NOT EXISTS times (
 	uuid UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
@@ -109,11 +109,11 @@ CREATE TABLE IF NOT EXISTS dependencies (
   name VARCHAR(128),
 	version VARCHAR(64),
   dependency VARCHAR(128),
-	semver VARCHAR(64),
+	semver VARCHAR(256),
 	url VARCHAR(128),
   type VARCHAR(8), -- dep / bundle / dev / optional
   created TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
   updated TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now()
 );
 
-CREATE UNIQUE INDEX IF NOT EXISTS dependencies_name_version_dependenct_idx ON dependencies(name, version, dependency);
+CREATE UNIQUE INDEX IF NOT EXISTS dependencies_name_version_dependency_type_idx ON dependencies(name, version, dependency, type);

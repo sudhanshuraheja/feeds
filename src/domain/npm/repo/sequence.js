@@ -1,5 +1,8 @@
 const joi = require('joi')
 const db = require('../../../lib/db')
+const log = require('../../../lib/logger')
+
+const logger = log.init('repo/npm/sequence')
 
 const sequence = {
   get: async (seq) => {
@@ -29,7 +32,8 @@ const sequence = {
 
     const validation = joi.validate({ seq, name, rev }, schema)
     if (validation.error) {
-      throw new Error(validation.error.details[0].message)
+      logger.debug(`Sequence: ${seq}, ${name}, ${rev}`)
+      throw new Error(`Sequence: ${validation.error.details[0].message}`)
     }
 
     try {

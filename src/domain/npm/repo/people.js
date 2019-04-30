@@ -1,5 +1,8 @@
 const joi = require('joi')
 const db = require('../../../lib/db')
+const log = require('../../../lib/logger')
+
+const logger = log.init('repo/npm/people')
 
 const people = {
   get: async (name, version) => {
@@ -25,15 +28,16 @@ const people = {
     const schema = joi.object().keys({
       name: joi.string().max(128).required(),
       version: joi.string().max(128).required(),
-      email: joi.string().max(64).required(),
-      fullname: joi.string().max(64).required(),
-      url: joi.string().max(64).required(),
-      type: joi.string().max(16).valid('author', 'maintainers', 'contributors')
+      email: joi.string().max(64).allow('').optional(),
+      fullname: joi.string().max(64).allow('').required(),
+      url: joi.string().max(64).allow('').optional(),
+      type: joi.string().max(16).valid('author', 'maintainer', 'contributor')
     })
 
     const validation = joi.validate({ name, version, email, fullname, url, type }, schema)
     if (validation.error) {
-      throw new Error(validation.error.details[0].message)
+      logger.debug(`People: ${name}, ${version}, ${email}, ${fullname}, ${url}, ${type}`)
+      throw new Error(`People: ${validation.error.details[0].message}`)
     }
 
     try {
