@@ -29,7 +29,7 @@ const versions = {
       name: joi.string().max(128).required(),
       version: joi.string().max(128).required(),
       description: joi.string().allow('').optional(),
-      homepage: joi.string().max(256).optional(),
+      homepage: joi.string().max(256).allow('').optional(),
       repositoryType: joi.string().max(16).optional(),
       repositoryURL: joi.string().max(256).optional(),
       repositoryGithubOrg: joi.string().max(64).allow('').optional(),
