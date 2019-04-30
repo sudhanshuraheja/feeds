@@ -49,7 +49,7 @@ const versions = {
 
     const validation = joi.validate({ id, name, version, description, homepage, repositoryType, repositoryURL, repositoryGithubOrg, repositoryGithubRepo, bugsURL, bugsEmail, licenceType, licenseURL, committerName, committerEmail, npmVersion, nodeVersion, distShasum, distTarball, deprecated }, schema)
     if (validation.error) {
-      logger.debug(`Versions: ${id}, ${name}, ${version}, ${description}, ${homepage}, ${repositoryType}, ${repositoryURL}, ${repositoryGithubOrg}, ${repositoryGithubRepo}, ${bugsURL}, ${bugsEmail}, ${licenceType}, ${licenseURL}, ${committerName}, ${committerEmail}, ${npmVersion}, ${nodeVersion}, ${distShasum}, ${distTarball}, ${deprecated}`)
+      logger.error(`Versions: ${id}, ${name}, ${version}, ${description}, ${homepage}, ${repositoryType}, ${repositoryURL}, ${repositoryGithubOrg}, ${repositoryGithubRepo}, ${bugsURL}, ${bugsEmail}, ${licenceType}, ${licenseURL}, ${committerName}, ${committerEmail}, ${npmVersion}, ${nodeVersion}, ${distShasum}, ${distTarball}, ${deprecated}`)
       throw new Error(`Versions: ${validation.error.details[0].message}`)
     }
 

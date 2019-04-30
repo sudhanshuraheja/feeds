@@ -36,7 +36,7 @@ const dependencies = {
 
     const validation = joi.validate({ name, version, dependency, semver, url, type }, schema)
     if (validation.error) {
-      logger.debug(`Dependencies: ${name}, ${version}, ${dependency}, ${semver}, ${url}, ${type}`)
+      logger.error(`Dependencies: ${name}, ${version}, ${dependency}, ${semver}, ${url}, ${type}`)
       throw new Error(`Dependencies: ${validation.error.details[0].message}`)
     }
 
