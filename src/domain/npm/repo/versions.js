@@ -36,7 +36,7 @@ const versions = {
       repositoryGithubRepo: joi.string().max(64).allow('').optional(),
       bugsURL: joi.string().max(256).optional(),
       bugsEmail: joi.string().max(128).optional(),
-      licenceType: joi.string().max(64).optional(),
+      licenceType: joi.string().max(64).allow('').optional(),
       licenseURL: joi.string().max(256).optional(),
       committerName: joi.string().max(128).required(),
       committerEmail: joi.string().max(128).required(),
