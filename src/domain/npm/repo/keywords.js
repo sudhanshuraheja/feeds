@@ -28,7 +28,7 @@ const keywords = {
     const schema = joi.object().keys({
       name: joi.string().max(128).required(),
       version: joi.string().max(64).required(),
-      keyword: joi.string().max(64).required(),
+      keyword: joi.string().max(256).required(),
     })
 
     const validation = joi.validate({ name, version, keyword }, schema)

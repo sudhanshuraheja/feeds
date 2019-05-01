@@ -97,7 +97,7 @@ CREATE TABLE IF NOT EXISTS keywords (
   uuid UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   name VARCHAR(128),
 	version VARCHAR(64),
-  keyword VARCHAR(128),
+  keyword VARCHAR(256),
   created TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
   updated TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now()
 );

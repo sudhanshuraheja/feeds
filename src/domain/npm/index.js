@@ -15,17 +15,16 @@ const npm = {
   parent: null,
   processed: 0,
   processMax: 50000,
-  startingCount: 17399,
+  startingCount: 18240,
 
   start: (parent) => {
     npm.parent = parent
     db.init(npm.process, npm.startingCount)
-    // 13547: found licenseType at 74 chars
   },
 
   process: async (data, done) => {
     fLogger(data)
-    logger.info(data.seq)
+    logger.info(`${data.seq}:${data.id}`)
 
     // sequence
     await npm.processSequence(data.seq, data.id, data.changes[0].rev)
