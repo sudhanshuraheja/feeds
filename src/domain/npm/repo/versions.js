@@ -24,11 +24,12 @@ const versions = {
   },
 
   insert: async (id, name, version, description, homepage, repositoryType, repositoryURL, repositoryGithubOrg, repositoryGithubRepo, bugsURL, bugsEmail, licenceType, licenseURL, committerName, committerEmail, npmVersion, nodeVersion, distShasum, distTarball, deprecated) => {
+    const fixedDescription = description.replace(/\0/g, '')
     const schema = joi.object().keys({
       id: joi.string().max(128).required(),
       name: joi.string().max(128).required(),
       version: joi.string().max(128).required(),
-      description: joi.string().allow('').optional(),
+      fixedDescription: joi.string().allow('').optional(),
       homepage: joi.string().max(256).allow('').optional(),
       repositoryType: joi.string().max(128).optional(),
       repositoryURL: joi.string().max(256).optional(),
@@ -47,14 +48,14 @@ const versions = {
       deprecated: joi.string().max(256).optional(),
     })
 
-    const validation = joi.validate({ id, name, version, description, homepage, repositoryType, repositoryURL, repositoryGithubOrg, repositoryGithubRepo, bugsURL, bugsEmail, licenceType, licenseURL, committerName, committerEmail, npmVersion, nodeVersion, distShasum, distTarball, deprecated }, schema)
+    const validation = joi.validate({ id, name, version, fixedDescription, homepage, repositoryType, repositoryURL, repositoryGithubOrg, repositoryGithubRepo, bugsURL, bugsEmail, licenceType, licenseURL, committerName, committerEmail, npmVersion, nodeVersion, distShasum, distTarball, deprecated }, schema)
     if (validation.error) {
-      logger.error(`Versions: ${id}, ${name}, ${version}, ${description}, ${homepage}, ${repositoryType}, ${repositoryURL}, ${repositoryGithubOrg}, ${repositoryGithubRepo}, ${bugsURL}, ${bugsEmail}, ${licenceType}, ${licenseURL}, ${committerName}, ${committerEmail}, ${npmVersion}, ${nodeVersion}, ${distShasum}, ${distTarball}, ${deprecated}`)
+      logger.error(`Versions: ${id}, ${name}, ${version}, ${fixedDescription}, ${homepage}, ${repositoryType}, ${repositoryURL}, ${repositoryGithubOrg}, ${repositoryGithubRepo}, ${bugsURL}, ${bugsEmail}, ${licenceType}, ${licenseURL}, ${committerName}, ${committerEmail}, ${npmVersion}, ${nodeVersion}, ${distShasum}, ${distTarball}, ${deprecated}`)
       throw new Error(`Versions: ${validation.error.details[0].message}`)
     }
 
     try {
-      const result = await db.query(`INSERT INTO versions(id, name, version, description, homepage, repositoryType, repositoryURL, repositoryGithubOrg, repositoryGithubRepo, bugsURL, bugsEmail, licenceType, licenseURL, committerName, committerEmail, npmVersion, nodeVersion, distShasum, distTarball, deprecated) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20) RETURNING *`, [id, name, version, description, homepage, repositoryType, repositoryURL, repositoryGithubOrg, repositoryGithubRepo, bugsURL, bugsEmail, licenceType, licenseURL, committerName, committerEmail, npmVersion, nodeVersion, distShasum, distTarball, deprecated])
+      const result = await db.query(`INSERT INTO versions(id, name, version, description, homepage, repositoryType, repositoryURL, repositoryGithubOrg, repositoryGithubRepo, bugsURL, bugsEmail, licenceType, licenseURL, committerName, committerEmail, npmVersion, nodeVersion, distShasum, distTarball, deprecated) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20) RETURNING *`, [id, name, version, fixedDescription, homepage, repositoryType, repositoryURL, repositoryGithubOrg, repositoryGithubRepo, bugsURL, bugsEmail, licenceType, licenseURL, committerName, committerEmail, npmVersion, nodeVersion, distShasum, distTarball, deprecated])
       return result
     } catch(err) {
       throw err
