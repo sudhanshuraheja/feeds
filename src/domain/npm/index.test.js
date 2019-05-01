@@ -10,6 +10,10 @@ describe('Domain NPM', () => {
     expect(repo.splitGithubURL("https://github.com/axios/axios1.git").githubRepo).toBe('axios1')
     expect(repo.splitGithubURL("https://github.com/axios/axios1").githubOrg).toBe('axios')
     expect(repo.splitGithubURL("https://github.com/axios/axios1").githubRepo).toBe('axios1')
+
+    expect(repo.splitGithubURL("git+https://github.com/incentro/generator-frontend-incubator.git#0a9be37865cc65447298fca1f2cbe21a24d397e9").githubOrg).toBe('incentro')
+    expect(repo.splitGithubURL("git+https://github.com/incentro/generator-frontend-incubator.git#0a9be37865cc65447298fca1f2cbe21a24d397e9").githubRepo).toBe('generator-frontend-incubator')
+    
   })
 
   test('Check licences', () => {

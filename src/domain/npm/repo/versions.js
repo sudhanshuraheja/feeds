@@ -33,7 +33,7 @@ const versions = {
       repositoryType: joi.string().max(128).optional(),
       repositoryURL: joi.string().max(256).optional(),
       repositoryGithubOrg: joi.string().max(64).allow('').optional(),
-      repositoryGithubRepo: joi.string().max(64).allow('').optional(),
+      repositoryGithubRepo: joi.string().max(128).allow('').optional(),
       bugsURL: joi.string().max(256).optional(),
       bugsEmail: joi.string().max(128).optional(),
       licenceType: joi.string().max(128).allow('').optional(),

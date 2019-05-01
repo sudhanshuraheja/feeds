@@ -34,7 +34,7 @@ const packages = {
       repositoryType: joi.string().max(128).optional(),
       repositoryURL: joi.string().max(256).optional(),
       repositoryGithubOrg: joi.string().max(64).optional(),
-      repositoryGithubRepo: joi.string().max(64).optional(),
+      repositoryGithubRepo: joi.string().max(128).optional(),
       readmeFileName: joi.string().max(256).optional(),
       homepage: joi.string().max(256).optional(),
       bugsURL: joi.string().max(256).optional(),

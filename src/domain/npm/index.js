@@ -15,7 +15,7 @@ const npm = {
   parent: null,
   processed: 0,
   processMax: 50000,
-  startingCount: 13547,
+  startingCount: 17399,
 
   start: (parent) => {
     npm.parent = parent
@@ -258,7 +258,8 @@ const npm = {
       const split = url.split('/')
       if (split[split.length - 2] && split[split.length - 1].replace('.git', '')) {
         git.githubOrg = split[split.length - 2]
-        git.githubRepo = split[split.length - 1].replace('.git', '')  
+        const repoURL = split[split.length - 1];
+        [ git.githubRepo ]  = repoURL.split('.git')
       }
     }
     return git
