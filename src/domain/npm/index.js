@@ -15,7 +15,7 @@ const npm = {
   parent: null,
   processed: 0,
   processMax: 50000,
-  startingCount: 7662,
+  startingCount: 11740,
 
   start: (parent) => {
     npm.parent = parent
@@ -113,8 +113,8 @@ const npm = {
     if (keywords) {
       keywords.forEach(async k => {
         try {
-          if(k && k.keyword) {
-            await repo.keywords.insert(name, version, k.keyword)
+          if(k !== '') {
+            await repo.keywords.insert(name, version, k)
           }
         } catch(err) {
           logger.error(err)
