@@ -15,16 +15,17 @@ const npm = {
   parent: null,
   processed: 0,
   processMax: 50000,
-  startingCount: 11740,
+  startingCount: 13547,
 
   start: (parent) => {
     npm.parent = parent
     db.init(npm.process, npm.startingCount)
-    // 7663 has invalid byte sequence for encoding "UTF8"
+    // 13547: found licenseType at 74 chars
   },
 
   process: async (data, done) => {
     fLogger(data)
+    logger.info(data.seq)
 
     // sequence
     await npm.processSequence(data.seq, data.id, data.changes[0].rev)
@@ -109,11 +110,13 @@ const npm = {
   },
 
   processKeywords: async (name, version, versionDetails) => {
+    const keys = []
     const {keywords} = versionDetails
-    if (keywords) {
+    if (Array.isArray(keywords)) {
       keywords.forEach(async k => {
         try {
-          if(k !== '') {
+          if(k !== '' && !keys.includes(k)) {
+            keys.push(k)
             await repo.keywords.insert(name, version, k)
           }
         } catch(err) {
