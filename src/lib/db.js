@@ -26,9 +26,6 @@ const db = {
         client.release()
       })      
             
-      const client = await pool.connect()
-      client.release()
-
     } catch(err) {
       throw(new errors.PostgresClientError(err))
     }
