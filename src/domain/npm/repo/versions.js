@@ -24,7 +24,7 @@ const versions = {
   },
 
   insert: async (id, name, version, description, homepage, repositoryType, repositoryURL, repositoryGithubOrg, repositoryGithubRepo, bugsURL, bugsEmail, licenceType, licenseURL, committerName, committerEmail, npmVersion, nodeVersion, distShasum, distTarball, deprecated) => {
-    const fixedDescription = description.replace(/\0/g, '')
+    const fixedDescription = description ? description.replace(/\0/g, '') : ''
     const schema = joi.object().keys({
       id: joi.string().max(128).required(),
       name: joi.string().max(128).required(),

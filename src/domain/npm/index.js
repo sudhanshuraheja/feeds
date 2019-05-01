@@ -15,7 +15,7 @@ const npm = {
   parent: null,
   processed: 0,
   processMax: 50000,
-  startingCount: 26275,
+  startingCount: 26463,
 
   start: (parent) => {
     npm.parent = parent
@@ -69,7 +69,7 @@ const npm = {
     const {githubOrg, githubRepo} = npm.splitGithubURL(doc.repository ? doc.repository.url : undefined)
     const {licenceType, licenceURL} = npm.splitLicense(doc.license, doc.licenses)
     const usersCount = doc.users ? Object.keys(doc.users).length : 0
-    const readme = doc.readme.replace(/\0/g, '')
+    const readme = doc.readme ? doc.readme.replace(/\0/g, '') : ''
     const description = doc.description ? doc.description.replace(/\0/g, '') : ''
     try {
       await repo.packages.insert(name, rev, description, readme, doc.time.modified, doc.time.created, repositoryType, repositoryURL, githubOrg, githubRepo, doc.readmeFileName, doc.homepage, bugsURL, bugsEmail, licenceType, licenceURL, usersCount)
