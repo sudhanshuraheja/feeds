@@ -70,7 +70,7 @@ const npm = {
     const {licenceType, licenceURL} = npm.splitLicense(doc.license, doc.licenses)
     const usersCount = doc.users ? Object.keys(doc.users).length : 0
     const readme = doc.readme.replace(/\0/g, '')
-    const description = doc.description.replace(/\0/g, '')
+    const description = doc.description ? doc.description.replace(/\0/g, '') : ''
     try {
       await repo.packages.insert(name, rev, description, readme, doc.time.modified, doc.time.created, repositoryType, repositoryURL, githubOrg, githubRepo, doc.readmeFileName, doc.homepage, bugsURL, bugsEmail, licenceType, licenceURL, usersCount)
     } catch(err) {
