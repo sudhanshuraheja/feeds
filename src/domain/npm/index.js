@@ -1,4 +1,5 @@
 /* eslint-disable no-underscore-dangle */
+const _ = require('lodash')
 const db = require('../../lib/npm')
 const repo = require('./repo')
 const log = require('../../lib/logger')
@@ -13,11 +14,13 @@ const fLogger = (item) => {
 const npm = {
   parent: null,
   processed: 0,
-  processMax: 1000,
+  processMax: 50000,
+  startingCount: 0,
 
   start: (parent) => {
     npm.parent = parent
-    db.init(npm.process, 0)
+    db.init(npm.process, npm.startingCount)
+    // 7663 has invalid byte sequence for encoding "UTF8"
   },
 
   process: async (data, done) => {
@@ -193,12 +196,18 @@ const npm = {
       })  
     }
 
+    const contribs = []
     if(contributors) {
       contributors.forEach(async person => {
         try {
           const { fullname, email, url } = npm.splitPerson(person)
           if (fullname || email || url) {
-            await repo.people.insert(name, version, email, fullname, url, 'contributor')
+            if (!_.find(contribs, { fullname, email, url })) {
+              contribs.push({ fullname, email, url })
+              await repo.people.insert(name, version, email, fullname, url, 'contributor')
+            } else {
+              logger.error(`Already contains ${name}/${version}: ${fullname}, ${email}, ${url}`)
+            }
           }
         } catch(err) {
           logger.error(err)
