@@ -33,7 +33,7 @@ const keywords = {
 
     const validation = joi.validate({ name, version, keyword }, schema)
     if (validation.error) {
-      logger.error(`Keywords: ${name}, ${version}, ${keyword}`)
+      logger.error(`Keywords: ${validation.error.details[0].context.key} :: ${validation.error.details[0].context.value}`)
       throw new Error(`Keywords: ${validation.error.details[0].message}`)
     }
 

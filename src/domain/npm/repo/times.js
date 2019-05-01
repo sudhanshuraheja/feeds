@@ -33,7 +33,7 @@ const times = {
 
     const validation = joi.validate({ name, version, time }, schema)
     if (validation.error) {
-      logger.error(`Times: ${name}, ${version}, ${time}`)
+      logger.error(`Times: ${validation.error.details[0].context.key} :: ${validation.error.details[0].context.value}`)
       throw new Error(`Times: ${validation.error.details[0].message}`)
     }
 

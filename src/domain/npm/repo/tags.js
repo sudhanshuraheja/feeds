@@ -33,7 +33,7 @@ const tags = {
 
     const validation = joi.validate({ name, tag, version }, schema)
     if (validation.error) {
-      logger.error(`Tags: ${name}, ${tag}, ${version}`)
+      logger.error(`Tags: ${validation.error.details[0].context.key} :: ${validation.error.details[0].context.value}`)
       throw new Error(`Tags: ${validation.error.details[0].message}`)
     }
 

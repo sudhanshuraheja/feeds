@@ -1,5 +1,8 @@
 const joi = require('joi')
 const db = require('../../../lib/db')
+const log = require('../../../lib/logger')
+
+const logger = log.init('repo/downloads')
 
 const downloads = {
   get: async (uuid) => {
@@ -30,6 +33,7 @@ const downloads = {
 
     const validation = joi.validate({ name, startTime, endTime, downloadCount }, schema)
     if (validation.error) {
+      logger.error(`Versions: ${validation.error.details[0].context.key} :: ${validation.error.details[0].context.value}`)
       throw new Error(validation.error.details[0].message)
     }
 

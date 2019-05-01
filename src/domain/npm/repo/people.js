@@ -36,7 +36,7 @@ const people = {
 
     const validation = joi.validate({ name, version, email, fullname, url, type }, schema)
     if (validation.error) {
-      logger.error(`People: ${name}, ${version}, ${email}, ${fullname}, ${url}, ${type}`)
+      logger.error(`People: ${validation.error.details[0].context.key} :: ${validation.error.details[0].context.value}`)
       throw new Error(`People: ${validation.error.details[0].message}`)
     }
 

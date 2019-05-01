@@ -46,7 +46,7 @@ const packages = {
 
     const validation = joi.validate({ name, rev, description, readme, timeModified, timeCreated, repositoryType, repositoryURL, repositoryGithubOrg, repositoryGithubRepo, readmeFileName, homepage, bugsURL, bugsEmail, licenceType, licenseURL, users }, schema)
     if (validation.error) {
-      logger.error(`Packages: ${name}, ${rev}, ${description}, ${readme}, ${timeModified}, ${timeCreated}, ${repositoryType}, ${repositoryURL}, ${repositoryGithubOrg}, ${repositoryGithubRepo}, ${readmeFileName}, ${homepage}, ${bugsURL}, ${bugsEmail}, ${licenceType}, ${licenseURL}, ${users}`)
+      logger.error(`Packages: ${validation.error.details[0].context.key} :: ${validation.error.details[0].context.value}`)
       throw new Error(`Packages: ${validation.error.details[0].message}`)
     }
 

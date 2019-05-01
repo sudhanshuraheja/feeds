@@ -1,5 +1,9 @@
 const joi = require('joi')
 const db = require('../../../lib/db')
+const log = require('../../../lib/logger')
+
+const logger = log.init('repo/github')
+
 
 const github = {
   get: async (uuid) => {
@@ -42,6 +46,7 @@ const github = {
 
     const validation = joi.validate({ name, avatarURL, description, createdAt, updatedAt, pushedAt, homepage, size, stars, subscribers, forks, openIssueCount, language, licence, archived, disabled }, schema)
     if (validation.error) {
+      logger.error(`Versions: ${validation.error.details[0].context.key} :: ${validation.error.details[0].context.value}`)
       throw new Error(validation.error.details[0].message)
     }
 

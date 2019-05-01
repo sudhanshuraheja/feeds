@@ -32,7 +32,7 @@ const sequence = {
 
     const validation = joi.validate({ seq, name, rev }, schema)
     if (validation.error) {
-      logger.error(`Sequence: ${seq}, ${name}, ${rev}`)
+      logger.error(`Sequence: ${validation.error.details[0].context.key} :: ${validation.error.details[0].context.value}`)
       throw new Error(`Sequence: ${validation.error.details[0].message}`)
     }
 
