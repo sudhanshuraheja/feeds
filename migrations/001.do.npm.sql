@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS packages (
 );
 
 CREATE TABLE IF NOT EXISTS versions (	
-	id VARCHAR(128) PRIMARY KEY, -- npm@1.1.25
+	id VARCHAR(256) PRIMARY KEY, -- npm@1.1.25
 	name VARCHAR(256), -- npm
   version VARCHAR(128), -- 1.1.25
 	description TEXT,
