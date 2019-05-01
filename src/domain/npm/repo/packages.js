@@ -39,7 +39,7 @@ const packages = {
       homepage: joi.string().max(256).optional(),
       bugsURL: joi.string().max(256).optional(),
       bugsEmail: joi.string().max(128).optional(),
-      licenceType: joi.string().max(64).allow('').optional(),
+      licenceType: joi.string().max(128).allow('').optional(),
       licenseURL: joi.string().max(256).optional(),
       users: joi.number().optional(),
     })
