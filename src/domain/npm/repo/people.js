@@ -26,7 +26,7 @@ const people = {
 
   insert: async (name, version, email, fullname, url, type) => {
     const schema = joi.object().keys({
-      name: joi.string().max(128).required(),
+      name: joi.string().max(256).required(),
       version: joi.string().max(128).required(),
       email: joi.string().max(64).allow('').optional(),
       fullname: joi.string().max(256).allow('').required(),

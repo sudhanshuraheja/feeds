@@ -25,7 +25,7 @@ const packages = {
 
   insert: async (name, rev, description, readme, timeModified, timeCreated, repositoryType, repositoryURL, repositoryGithubOrg, repositoryGithubRepo, readmeFileName, homepage, bugsURL, bugsEmail, licenceType, licenseURL, users) => {
     const schema = joi.object().keys({
-      name: joi.string().max(128).required(),
+      name: joi.string().max(256).required(),
       rev: joi.string().max(128).required(),
       description: joi.string().allow('').optional(),
       readme: joi.string().allow('').optional(),

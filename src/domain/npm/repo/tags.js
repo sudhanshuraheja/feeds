@@ -26,7 +26,7 @@ const tags = {
 
   insert: async (name, tag, version) => {
     const schema = joi.object().keys({
-      name: joi.string().max(128).required(),
+      name: joi.string().max(256).required(),
       tag: joi.string().max(64).required(),
       version: joi.string().max(128).required(),
     })

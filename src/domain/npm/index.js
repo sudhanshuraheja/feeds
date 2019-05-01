@@ -15,7 +15,7 @@ const npm = {
   parent: null,
   processed: 0,
   processMax: 50000,
-  startingCount: 39135,
+  startingCount: 44350,
 
   start: (parent) => {
     npm.parent = parent

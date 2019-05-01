@@ -27,7 +27,7 @@ const versions = {
     const fixedDescription = description ? description.replace(/\0/g, '') : ''
     const schema = joi.object().keys({
       id: joi.string().max(128).required(),
-      name: joi.string().max(128).required(),
+      name: joi.string().max(256).required(),
       version: joi.string().max(128).required(),
       fixedDescription: joi.string().allow('').optional(),
       homepage: joi.string().max(256).allow('').optional(),

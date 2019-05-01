@@ -26,7 +26,7 @@ const sequence = {
   insert: async (seq, name, rev) => {
     const schema = joi.object().keys({
       seq: joi.number().min(1).required(),
-      name: joi.string().max(128).required(),
+      name: joi.string().max(256).required(),
       rev: joi.string().max(64).required(),
     })
 
