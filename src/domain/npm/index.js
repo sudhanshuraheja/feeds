@@ -1,3 +1,6 @@
+/* eslint-disable no-await-in-loop */
+/* eslint-disable guard-for-in */
+/* eslint-disable no-restricted-syntax */
 /* eslint-disable no-underscore-dangle */
 const _ = require('lodash')
 const db = require('../../lib/npm')
@@ -6,16 +9,16 @@ const log = require('../../lib/logger')
 
 const logger = log.init('domain/npm')
 
-const fLogger = (item) => {
-  // eslint-disable-next-line no-console
-  console.log(JSON.stringify(item, null, 2))
-}
+// const fLogger = (item) => {
+//   // eslint-disable-next-line no-console
+//   console.log(JSON.stringify(item, null, 2))
+// }
 
 const npm = {
   parent: null,
   processed: 0,
   processMax: 50000,
-  startingCount: 44350,
+  startingCount: 0,
 
   start: (parent) => {
     npm.parent = parent
@@ -23,24 +26,24 @@ const npm = {
   },
 
   process: async (data, done) => {
-    fLogger(data)
+    // fLogger(data)
     logger.info(`${data.seq}:${data.id}`)
 
-    // sequence
     await npm.processSequence(data.seq, data.id, data.changes[0].rev)
 
-    // -- package --
     const name = data.doc._id
     await npm.processPackage(name, data.doc._rev, data.doc)
     await npm.processTags(name, data.doc)
 
     const {versions} = data.doc
-    Object.keys(versions).forEach(async version => {
-      await npm.processVersion(versions[version])
-      await npm.processKeywords(name, version, versions[version])
-      await npm.processDependencies(name, version, versions[version])
-      await npm.processPeople(name, version, versions[version])
-    })
+    const keys = Object.keys(versions)
+    for (const version in keys) {
+      const item = versions[keys[version]]
+      await npm.processVersion(item)
+      await npm.processKeywords(name, keys[version], item)
+      await npm.processDependencies(name, keys[version], item)
+      await npm.processPeople(name, keys[version], item)
+    }
     await npm.processTime(name, data.doc)
     
     npm.processed += 1
@@ -49,7 +52,6 @@ const npm = {
     } else {
       npm.parent.release()
     }
-    // logger.info(data)
   },
 
   processSequence: async (seq, id, rev) => {
@@ -81,26 +83,28 @@ const npm = {
 
   processTags: async (name, doc) => {
     const tags = doc['dist-tags']
-    Object.keys(tags).forEach(async tag => {
+    const keys = Object.keys(tags)
+    for (const i in keys) {
+      const tag = keys[i]
       try {
         await repo.tags.insert(name, tag, tags[tag])
       } catch(err) {
         logger.error(err)
         npm.parent.release()  
       }
-    })
+    }
   },
 
   processVersion: async (details) => {
+    const repositoryType = (details.repository && details.repository.type && details.repository.type.length > 0) ? details.repository.type : undefined
+    const repositoryURL = (details.repository && details.repository.url && details.repository.url.length > 0) ? details.repository.url : undefined
+    const bugsURL = details.bugs ? details.bugs.url : undefined
+    const bugsEmail = details.bugs ? details.bugs.email : undefined
+    const {githubOrg, githubRepo} = npm.splitGithubURL(details.repository ? details.repository.url : undefined)
+    const {licenceType, licenceURL} = npm.splitLicense(details.license, details.licenses)
+    const committerName = details._npmUser ? details._npmUser.name : undefined
+    const committerEmail = details._npmUser ? details._npmUser.email : undefined
     try {
-      const repositoryType = (details.repository && details.repository.type && details.repository.type.length > 0) ? details.repository.type : undefined
-      const repositoryURL = (details.repository && details.repository.url && details.repository.url.length > 0) ? details.repository.url : undefined
-      const bugsURL = details.bugs ? details.bugs.url : undefined
-      const bugsEmail = details.bugs ? details.bugs.email : undefined
-      const {githubOrg, githubRepo} = npm.splitGithubURL(details.repository ? details.repository.url : undefined)
-      const {licenceType, licenceURL} = npm.splitLicense(details.license, details.licenses)
-      const committerName = details._npmUser ? details._npmUser.name : undefined
-      const committerEmail = details._npmUser ? details._npmUser.email : undefined
       // eslint-disable-next-line no-underscore-dangle
       await repo.versions.insert(details._id, details.name, details.version, details.description, details.homepage, repositoryType, repositoryURL, githubOrg, githubRepo, bugsURL, bugsEmail, licenceType, licenceURL, committerName, committerEmail, details.npmVersion, details.nodeVersion, details.distShasum, details.distTarball, details.deprecated)
     } catch(err) {
@@ -111,66 +115,74 @@ const npm = {
 
   processKeywords: async (name, version, versionDetails) => {
     const keys = []
-    const {keywords} = versionDetails
+    const { keywords } = versionDetails
     if (Array.isArray(keywords)) {
-      keywords.forEach(async k => {
+      for (const k in keywords) {
+        const key = keywords[k]
         try {
-          if(k !== '' && !keys.includes(k)) {
-            keys.push(k)
-            await repo.keywords.insert(name, version, k)
+          if(key !== '' && !keys.includes(key)) {
+            keys.push(key)
+            await repo.keywords.insert(name, version, key)
           }
         } catch(err) {
           logger.error(err)
           npm.parent.release()
         }
-      })  
+      }
     }
   },
 
   processDependencies: async (name, version, versionDetails) => {
     const {dependencies, devDependencies, optionalDependencies, bundleDependencies} = versionDetails
     if (dependencies) {
-      Object.keys(dependencies).forEach(async dep => {
+      const keys = Object.keys(dependencies)
+      for (const i in keys) {
+        const dep = keys[i]
         try {
           await repo.dependencies.insert(name, version, dep, dependencies[dep], '', 'dep')
         } catch(err) {
           logger.error(err)
           npm.parent.release()
         }
-      })  
+      }
     }
 
     if (devDependencies) {
-      Object.keys(devDependencies).forEach(async dep => {
+      const keys = Object.keys(devDependencies)
+      for (const i in keys) {
+        const dep = keys[i]
         try {
           await repo.dependencies.insert(name, version, dep, devDependencies[dep], '', 'dev')
         } catch(err) {
           logger.error(err)
           npm.parent.release()
         }
-      })  
+      }
     }
 
     if (optionalDependencies) {
-      Object.keys(optionalDependencies).forEach(async dep => {
+      const keys = Object.keys(optionalDependencies)
+      for (const i in keys) {
+        const dep = keys[i]
         try {
           await repo.dependencies.insert(name, version, dep, optionalDependencies[dep], '', 'optional')
         } catch(err) {
           logger.error(err)
           npm.parent.release()
         }
-      })  
+      }
     }
 
     if (bundleDependencies) {
-      bundleDependencies.forEach(async dep => {
+      for (const i in bundleDependencies) {
+        const dep = bundleDependencies[i]
         try {
           await repo.dependencies.insert(name, version, dep, '', '', 'bundle')
         } catch(err) {
           logger.error(err)
           npm.parent.release()
         }
-      })  
+      }
     }
   },
 
@@ -186,8 +198,9 @@ const npm = {
       npm.parent.release()
     }
 
-    if (maintainers) {
-      maintainers.forEach(async person => {
+    if (Array.isArray(maintainers)) {
+      for (const i in maintainers) {
+        const person = maintainers[i]
         try {
           const { fullname, email, url } = npm.splitPerson(person)
           if (fullname || email || url) {
@@ -197,12 +210,13 @@ const npm = {
           logger.error(err)
           npm.parent.release()
         }
-      })  
+      }
     }
 
     const contribs = []
-    if(contributors) {
-      contributors.forEach(async person => {
+    if(Array.isArray(contributors)) {
+      for (const i in contributors) {
+        const person = contributors[i]
         try {
           const { fullname, email, url } = npm.splitPerson(person)
           if (fullname || email || url) {
@@ -217,13 +231,15 @@ const npm = {
           logger.error(err)
           npm.parent.release()
         }
-      })  
+      }
     }
   },
 
   processTime: async (name, doc) => {
     const {time} = doc
-    Object.keys(time).forEach(async (version) => {
+    const keys = Object.keys(time)
+    for (const i in keys) {
+      const version = keys[i]
       const ignore = ['modified', 'created']
       if(!ignore.includes(version)) {
         try {
@@ -233,7 +249,7 @@ const npm = {
           npm.parent.release()
         }
       }
-    })
+    }
   },
 
   splitPerson: (author) => {
