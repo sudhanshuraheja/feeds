@@ -27,7 +27,7 @@ const times = {
   insert: async (name, version, time) => {
     const schema = joi.object().keys({
       name: joi.string().max(128).required(),
-      version: joi.string().max(64).required(),
+      version: joi.string().max(128).required(),
       time: joi.date().iso().required(),
     })
 

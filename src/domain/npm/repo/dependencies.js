@@ -27,7 +27,7 @@ const dependencies = {
   insert: async (name, version, dependency, semver, url, type) => {
     const schema = joi.object().keys({
       name: joi.string().max(128).required(),
-      version: joi.string().max(64).required(),
+      version: joi.string().max(128).required(),
       dependency: joi.string().max(128).required(),
       semver: joi.string().max(256).allow('').optional(),
       url: joi.string().max(128).allow('').optional(),

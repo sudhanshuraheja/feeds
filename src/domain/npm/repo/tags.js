@@ -28,7 +28,7 @@ const tags = {
     const schema = joi.object().keys({
       name: joi.string().max(128).required(),
       tag: joi.string().max(64).required(),
-      version: joi.string().max(64).required(),
+      version: joi.string().max(128).required(),
     })
 
     const validation = joi.validate({ name, tag, version }, schema)

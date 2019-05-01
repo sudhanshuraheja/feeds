@@ -27,7 +27,7 @@ const keywords = {
   insert: async (name, version, keyword) => {
     const schema = joi.object().keys({
       name: joi.string().max(128).required(),
-      version: joi.string().max(64).required(),
+      version: joi.string().max(128).required(),
       keyword: joi.string().max(256).required(),
     })
 

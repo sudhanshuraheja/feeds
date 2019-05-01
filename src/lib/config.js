@@ -54,7 +54,7 @@ const config = {
     PG_USER: joi.string().required(),
     PG_PASS: joi.string().allow('').required(),
     PG_DATABASE: joi.string().required(),
-    PG_MAX_CONNECTIONS: joi.number().min(1).max(50).required(),
+    PG_MAX_CONNECTIONS: joi.number().min(1).max(500).required(),
     PG_IDLE_TIMEOUT_MS: joi.number().min(100).max(5000000).required(),
     PG_CONNECTION_TIMEOUT_MS: joi.number().min(100).max(5000000).required(),
     IS_TEST: joi.boolean()

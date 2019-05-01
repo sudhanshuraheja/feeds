@@ -61,7 +61,7 @@ CREATE TABLE IF NOT EXISTS tags ( -- distribution-tags
 	uuid UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
 	name VARCHAR(128),
 	tag VARCHAR(64),
-	version VARCHAR(64),
+	version VARCHAR(128),
 	created TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
 	updated TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now()
 );
@@ -85,7 +85,7 @@ CREATE UNIQUE INDEX IF NOT EXISTS people_name_version_fullname_email_url_type_id
 CREATE TABLE IF NOT EXISTS times (
 	uuid UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   name VARCHAR(128),
-	version VARCHAR(64),
+	version VARCHAR(128),
 	time TIMESTAMP WITH TIME ZONE,
   created TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
   updated TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now()
@@ -96,7 +96,7 @@ CREATE UNIQUE INDEX IF NOT EXISTS times_name_version_idx ON times(name, version)
 CREATE TABLE IF NOT EXISTS keywords (
   uuid UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   name VARCHAR(128),
-	version VARCHAR(64),
+	version VARCHAR(128),
   keyword VARCHAR(256),
   created TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
   updated TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now()
@@ -107,7 +107,7 @@ CREATE UNIQUE INDEX IF NOT EXISTS keywords_name_version_keyword_idx ON keywords(
 CREATE TABLE IF NOT EXISTS dependencies (
   uuid UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   name VARCHAR(128),
-	version VARCHAR(64),
+	version VARCHAR(128),
   dependency VARCHAR(128),
 	semver VARCHAR(256),
 	url VARCHAR(128),
