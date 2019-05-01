@@ -2,10 +2,7 @@ const { createLogger, format, transports } = require('winston')
 const config = require('./config')
 
 const logger = {
-  log: null,
   init: (callingModule) => {
-    if (logger.log) return logger.log
-
     config.init()
     
     // eslint-disable-next-line new-cap
@@ -26,9 +23,7 @@ const logger = {
       ],
       exitOnError: false
     })
-
-    logger.log.info(`Starting logger with logLevel ${config.env.LOG_LEVEL}`)
-
+    logger.log.debug(`Starting logger with logLevel ${config.env.LOG_LEVEL}`)
     return logger.log
   }
 }

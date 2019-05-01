@@ -1,7 +1,12 @@
 const joi = require('joi')
 
 const config = {
+  setup: false,
   init: (configFilePath) => {
+    if (config.setup) {
+      return null
+    }
+    
     const options = {}
     if (configFilePath) {
       options.path = configFilePath
@@ -44,6 +49,7 @@ const config = {
     Object.keys(config.env).forEach(item => {
       config.env[item] = process.env[item]
     })
+    config.setup = true
   },
 
   schema: {
