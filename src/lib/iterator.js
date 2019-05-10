@@ -8,11 +8,13 @@ class Iterator {
 
     $(key, returnValue = false) {
         if(objects.isArray(this.obj) || objects.isObject(this.obj)) {
-            this.obj = objects.hasKey(this.obj, key) ? this.obj[key] : undefined
-            return returnValue ? this.obj : this
+            const value = objects.hasKey(this.obj, key) ? this.obj[key] : undefined
+            const object = new Iterator(value)
+            return returnValue ? object.value() : object
         }
-        this.obj = undefined
-        return returnValue ? this.obj : this
+        const value = undefined
+        const object = new Iterator(value)
+        return returnValue ? object.value() : object
     }
 
     keys() {
