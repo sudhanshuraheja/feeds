@@ -9,6 +9,6 @@ describe('NPM', () => {
         npm.release()
         testDone()
       }, 0)
-    })
+    }, 20000)
 
 })
