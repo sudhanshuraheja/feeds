@@ -6,6 +6,7 @@ const _ = require('lodash')
 const db = require('../../lib/npm')
 const repo = require('./repo')
 const log = require('../../lib/logger')
+const Iterator = require('../../lib/iterator')
 
 const logger = log.init('domain/npm')
 
@@ -26,16 +27,24 @@ const npm = {
   },
 
   process: async (data, done) => {
+    const dataI = new Iterator(data)
+
+    const seq = dataI.$('seq', true)
+    const id = dataI.$('id', true)
+    const rev = dataI.$('changes').$(0).$('rev', true)
+
+    const docI = dataI.$('doc')
+    const doc = docI.value()
+    const name = docI.$('_id', true)
+    const versions = docI.$('versions', true)
+
     // fLogger(data)
-    logger.info(`${data.seq}:${data.id}`)
+    logger.info(`${seq}:${id}`)
 
-    await npm.processSequence(data.seq, data.id, data.changes[0].rev)
+    await npm.processSequence(seq, id, rev)
+    await npm.processPackage(name, rev, doc)
+    await npm.processTags(name, doc)
 
-    const name = data.doc._id
-    await npm.processPackage(name, data.doc._rev, data.doc)
-    await npm.processTags(name, data.doc)
-
-    const {versions} = data.doc
     const keys = Object.keys(versions)
     for (const version in keys) {
       const item = versions[keys[version]]
@@ -64,15 +73,17 @@ const npm = {
   },
 
   processPackage: async (name, rev, doc) => {
-    const repositoryType = (doc.repository && doc.repository.type && doc.repository.type.length > 0) ? doc.repository.type : undefined
-    const repositoryURL = (doc.repository && doc.repository.url && doc.repository.url.length > 0) ? doc.repository.url : undefined
-    const bugsURL = doc.bugs ? doc.bugs.url : undefined
-    const bugsEmail = doc.bugs ? doc.bugs.email : undefined
-    const {githubOrg, githubRepo} = npm.splitGithubURL(doc.repository ? doc.repository.url : undefined)
-    const {licenceType, licenceURL} = npm.splitLicense(doc.license, doc.licenses)
-    const usersCount = doc.users ? Object.keys(doc.users).length : 0
-    const readme = doc.readme ? doc.readme.replace(/\0/g, '') : ''
-    const description = doc.description ? doc.description.replace(/\0/g, '') : ''
+    const docI = new Iterator(doc)
+    const repositoryType = docI.$('repository').$('type', true)
+    const repositoryURL = docI.$('repository').$('url', true)
+    const bugsURL = docI.$('bugs').$('url', true)
+    const bugsEmail = docI.$('bugs').$('email', true)
+    const {githubOrg, githubRepo} = npm.splitGithubURL(docI.$('repository').$('url', true))
+    const {licenceType, licenceURL} = npm.splitLicense(docI.$('license', true) || docI.$('licenses', true))
+    const usersCount = docI.$('users').keys().length
+    const readme = docI.$('readme').string().replace(/\0/g, '')
+    const description = docI.$('description').string().replace(/\0/g, '')
+    
     try {
       await repo.packages.insert(name, rev, description, readme, doc.time.modified, doc.time.created, repositoryType, repositoryURL, githubOrg, githubRepo, doc.readmeFileName, doc.homepage, bugsURL, bugsEmail, licenceType, licenceURL, usersCount)
     } catch(err) {
@@ -96,14 +107,16 @@ const npm = {
   },
 
   processVersion: async (details) => {
-    const repositoryType = (details.repository && details.repository.type && details.repository.type.length > 0) ? details.repository.type : undefined
-    const repositoryURL = (details.repository && details.repository.url && details.repository.url.length > 0) ? details.repository.url : undefined
-    const bugsURL = details.bugs ? details.bugs.url : undefined
-    const bugsEmail = details.bugs ? details.bugs.email : undefined
-    const {githubOrg, githubRepo} = npm.splitGithubURL(details.repository ? details.repository.url : undefined)
-    const {licenceType, licenceURL} = npm.splitLicense(details.license, details.licenses)
-    const committerName = details._npmUser ? details._npmUser.name : undefined
-    const committerEmail = details._npmUser ? details._npmUser.email : undefined
+    const docI = new Iterator(details)
+    const repositoryType = docI.$('repository').$('type', true)
+    const repositoryURL = docI.$('repository').$('url', true)
+    const bugsURL = docI.$('bugs').$('url', true)
+    const bugsEmail = docI.$('bugs').$('email', true)
+    const {githubOrg, githubRepo} = npm.splitGithubURL(docI.$('repository').$('url', true))
+    const {licenceType, licenceURL} = npm.splitLicense(docI.$('license', true) || docI.$('licenses', true))
+    const committerName = docI.$('_npmUser').$('name', true)
+    const committerEmail = docI.$('_npmUser').$('email', true)
+    
     try {
       // eslint-disable-next-line no-underscore-dangle
       await repo.versions.insert(details._id, details.name, details.version, details.description, details.homepage, repositoryType, repositoryURL, githubOrg, githubRepo, bugsURL, bugsEmail, licenceType, licenceURL, committerName, committerEmail, details.npmVersion, details.nodeVersion, details.distShasum, details.distTarball, details.deprecated)
