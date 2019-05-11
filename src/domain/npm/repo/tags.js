@@ -7,8 +7,8 @@ const logger = log.init('repo/npm/tags')
 const tags = {
   get: async (name, tag) => {
     const schema = joi.object().keys({
-      name: joi.string().max(128).required(),
-      tag: joi.string().max(64).required(),
+      name: joi.string().required(),
+      tag: joi.string().required(),
     })
 
     const validation = joi.validate({ name, tag }, schema)
@@ -26,14 +26,14 @@ const tags = {
 
   insert: async (name, tag, version) => {
     const schema = joi.object().keys({
-      name: joi.string().max(256).required(),
-      tag: joi.string().max(64).required(),
-      version: joi.string().max(128).required(),
+      name: joi.string().required(),
+      tag: joi.string().required(),
+      version: joi.string().required(),
     })
 
     const validation = joi.validate({ name, tag, version }, schema)
     if (validation.error) {
-      logger.error(`Tags: ${validation.error.details[0].context.key} :: ${validation.error.details[0].context.value}`)
+      logger.debug(`Tags: ${validation.error.details[0].context.key} :: ${validation.error.details[0].context.value}`)
       throw new Error(`Tags: ${validation.error.details[0].message}`)
     }
 

@@ -7,7 +7,7 @@ const logger = log.init('repo/npm/versions')
 const versions = {
   get: async (id) => {
     const schema = joi.object().keys({
-      id: joi.string().max(128).required(),
+      id: joi.string().required(),
     })
 
     const validation = joi.validate({ id }, schema)
@@ -26,31 +26,31 @@ const versions = {
   insert: async (id, name, version, description, homepage, repositoryType, repositoryURL, repositoryGithubOrg, repositoryGithubRepo, bugsURL, bugsEmail, licenceType, licenseURL, committerName, committerEmail, npmVersion, nodeVersion, distShasum, distTarball, deprecated) => {
     const fixedDescription = description ? description.replace(/\0/g, '') : ''
     const schema = joi.object().keys({
-      id: joi.string().max(256).required(),
-      name: joi.string().max(256).required(),
-      version: joi.string().max(128).required(),
+      id: joi.string().required(),
+      name: joi.string().required(),
+      version: joi.string().required(),
       fixedDescription: joi.string().allow('').optional(),
-      homepage: joi.string().max(256).allow('').optional(),
-      repositoryType: joi.string().max(128).allow('').optional(),
-      repositoryURL: joi.string().max(256).allow('').optional(),
-      repositoryGithubOrg: joi.string().max(64).allow('').optional(),
-      repositoryGithubRepo: joi.string().max(128).allow('').optional(),
-      bugsURL: joi.string().max(256).optional(),
-      bugsEmail: joi.string().max(128).optional(),
-      licenceType: joi.string().max(128).allow('').optional(),
-      licenseURL: joi.string().max(256).optional(),
-      committerName: joi.string().max(128).required(),
-      committerEmail: joi.string().max(128).required(),
-      npmVersion: joi.string().max(32).optional(),
-      nodeVersion: joi.string().max(32).optional(),
-      distShasum: joi.string().max(64).optional(),
-      distTarball: joi.string().max(256).optional(),
-      deprecated: joi.string().max(256).optional(),
+      homepage: joi.string().allow('').optional(),
+      repositoryType: joi.string().allow('').optional(),
+      repositoryURL: joi.string().allow('').optional(),
+      repositoryGithubOrg: joi.string().allow('').optional(),
+      repositoryGithubRepo: joi.string().allow('').optional(),
+      bugsURL: joi.string().optional(),
+      bugsEmail: joi.string().optional(),
+      licenceType: joi.string().allow('').optional(),
+      licenseURL: joi.string().optional(),
+      committerName: joi.string().required(),
+      committerEmail: joi.string().required(),
+      npmVersion: joi.string().optional(),
+      nodeVersion: joi.string().optional(),
+      distShasum: joi.string().optional(),
+      distTarball: joi.string().optional(),
+      deprecated: joi.string().optional(),
     })
 
     const validation = joi.validate({ id, name, version, fixedDescription, homepage, repositoryType, repositoryURL, repositoryGithubOrg, repositoryGithubRepo, bugsURL, bugsEmail, licenceType, licenseURL, committerName, committerEmail, npmVersion, nodeVersion, distShasum, distTarball, deprecated }, schema)
     if (validation.error) {
-      logger.error(`Versions: ${validation.error.details[0].context.key} :: ${validation.error.details[0].context.value}`)
+      logger.debug(`Versions: ${validation.error.details[0].context.key} :: ${validation.error.details[0].context.value}`)
       throw new Error(`Versions: ${validation.error.details[0].message}`)
     }
 

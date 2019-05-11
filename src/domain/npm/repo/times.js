@@ -7,8 +7,8 @@ const logger = log.init('repo/npm/times')
 const times = {
   get: async (name, version) => {
     const schema = joi.object().keys({
-      name: joi.string().max(128).required(),
-      version: joi.string().max(64).required(),
+      name: joi.string().required(),
+      version: joi.string().required(),
     })
 
     const validation = joi.validate({ name, version }, schema)
@@ -26,14 +26,14 @@ const times = {
 
   insert: async (name, version, time) => {
     const schema = joi.object().keys({
-      name: joi.string().max(256).required(),
-      version: joi.string().max(128).required(),
+      name: joi.string().required(),
+      version: joi.string().required(),
       time: joi.date().iso().required(),
     })
 
     const validation = joi.validate({ name, version, time }, schema)
     if (validation.error) {
-      logger.error(`Times: ${validation.error.details[0].context.key} :: ${validation.error.details[0].context.value}`)
+      logger.debug(`Times: ${validation.error.details[0].context.key} :: ${validation.error.details[0].context.value}`)
       throw new Error(`Times: ${validation.error.details[0].message}`)
     }
 

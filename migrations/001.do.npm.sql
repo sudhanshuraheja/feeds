@@ -2,55 +2,55 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 CREATE TABLE IF NOT EXISTS sequence (
 	seq BIGINT PRIMARY KEY,
-	name VARCHAR(256),
-	rev VARCHAR(64),
+	name VARCHAR,
+	rev VARCHAR,
 	created TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
 	updated TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now()
 );
 
 CREATE TABLE IF NOT EXISTS packages (
-	name VARCHAR(256) PRIMARY KEY,
-	rev VARCHAR(128),
+	name VARCHAR PRIMARY KEY,
+	rev VARCHAR,
 	description TEXT,
 	readme TEXT,
 	timeModified TIMESTAMP WITH TIME ZONE,
 	timeCreated TIMESTAMP WITH TIME ZONE,
-	repositoryType VARCHAR(128),
-	repositoryURL VARCHAR(256),
-	repositoryGithubOrg VARCHAR(64),
-	repositoryGithubRepo VARCHAR(128),
-	readmeFileName VARCHAR(256),
-	homepage VARCHAR(256),
-	bugsURL VARCHAR(256),
-	bugsEmail VARCHAR(128),
-	licenceType VARCHAR(128),
-	licenseURL VARCHAR(256),
+	repositoryType VARCHAR,
+	repositoryURL VARCHAR,
+	repositoryGithubOrg VARCHAR,
+	repositoryGithubRepo VARCHAR,
+	readmeFileName VARCHAR,
+	homepage VARCHAR,
+	bugsURL VARCHAR,
+	bugsEmail VARCHAR,
+	licenceType VARCHAR,
+	licenseURL VARCHAR,
 	users BIGINT,
 	created TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
 	updated TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now()
 );
 
 CREATE TABLE IF NOT EXISTS versions (	
-	id VARCHAR(256) PRIMARY KEY, -- npm@1.1.25
-	name VARCHAR(256), -- npm
-  version VARCHAR(128), -- 1.1.25
+	id VARCHAR PRIMARY KEY, -- npm@1.1.25
+	name VARCHAR, -- npm
+  version VARCHAR, -- 1.1.25
 	description TEXT,
-	homepage VARCHAR(256),
-	repositoryType VARCHAR(128),
-	repositoryURL VARCHAR(256),
-	repositoryGithubOrg VARCHAR(64),
-	repositoryGithubRepo VARCHAR(128),
-	bugsURL VARCHAR(256),
-	bugsEmail VARCHAR(128),
-	licenceType VARCHAR(128),
-	licenseURL VARCHAR(256),
-	committerName VARCHAR(128),
-	committerEmail VARCHAR(128),
-	npmVersion VARCHAR(32),
-	nodeVersion VARCHAR(32),
-	distShasum VARCHAR(64),
-	distTarball VARCHAR(256),
-	deprecated VARCHAR(256),
+	homepage VARCHAR,
+	repositoryType VARCHAR,
+	repositoryURL VARCHAR,
+	repositoryGithubOrg VARCHAR,
+	repositoryGithubRepo VARCHAR,
+	bugsURL VARCHAR,
+	bugsEmail VARCHAR,
+	licenceType VARCHAR,
+	licenseURL VARCHAR,
+	committerName VARCHAR,
+	committerEmail VARCHAR,
+	npmVersion VARCHAR,
+	nodeVersion VARCHAR,
+	distShasum VARCHAR,
+	distTarball VARCHAR,
+	deprecated VARCHAR,
   created TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
   updated TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now()
 );
@@ -59,9 +59,9 @@ CREATE UNIQUE INDEX IF NOT EXISTS versions_name_version_idx ON versions(name, ve
 
 CREATE TABLE IF NOT EXISTS tags ( -- distribution-tags
 	uuid UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-	name VARCHAR(256),
-	tag VARCHAR(64),
-	version VARCHAR(128),
+	name VARCHAR,
+	tag VARCHAR,
+	version VARCHAR,
 	created TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
 	updated TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now()
 );
@@ -70,12 +70,12 @@ CREATE UNIQUE INDEX IF NOT EXISTS tags_name_tag_idx ON tags (name, tag);
 
 CREATE TABLE IF NOT EXISTS people (
   uuid UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  name VARCHAR(256),
-	version VARCHAR(128),
-	email VARCHAR(64),
-	fullname VARCHAR(256),
-	url VARCHAR(256),
-  type VARCHAR(16), -- author / maintainers / contributors
+  name VARCHAR,
+	version VARCHAR,
+	email VARCHAR,
+	fullname VARCHAR,
+	url VARCHAR,
+  type VARCHAR, -- author / maintainers / contributors
   created TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
   updated TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now()
 );
@@ -84,8 +84,8 @@ CREATE UNIQUE INDEX IF NOT EXISTS people_name_version_fullname_email_url_type_id
 
 CREATE TABLE IF NOT EXISTS times (
 	uuid UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  name VARCHAR(256),
-	version VARCHAR(128),
+  name VARCHAR,
+	version VARCHAR,
 	time TIMESTAMP WITH TIME ZONE,
   created TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
   updated TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now()
@@ -95,9 +95,9 @@ CREATE UNIQUE INDEX IF NOT EXISTS times_name_version_idx ON times(name, version)
 
 CREATE TABLE IF NOT EXISTS keywords (
   uuid UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  name VARCHAR(256),
-	version VARCHAR(128),
-  keyword VARCHAR(256),
+  name VARCHAR,
+	version VARCHAR,
+  keyword VARCHAR,
   created TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
   updated TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now()
 );
@@ -106,12 +106,12 @@ CREATE UNIQUE INDEX IF NOT EXISTS keywords_name_version_keyword_idx ON keywords(
 
 CREATE TABLE IF NOT EXISTS dependencies (
   uuid UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  name VARCHAR(256),
-	version VARCHAR(128),
-  dependency VARCHAR(128),
-	semver VARCHAR(256),
-	url VARCHAR(128),
-  type VARCHAR(8), -- dep / bundle / dev / optional
+  name VARCHAR,
+	version VARCHAR,
+  dependency VARCHAR,
+	semver VARCHAR,
+	url VARCHAR,
+  type VARCHAR, -- dep / bundle / dev / optional
   created TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
   updated TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now()
 );

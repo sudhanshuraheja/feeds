@@ -26,13 +26,13 @@ const sequence = {
   insert: async (seq, name, rev) => {
     const schema = joi.object().keys({
       seq: joi.number().min(1).required(),
-      name: joi.string().max(256).required(),
-      rev: joi.string().max(64).required(),
+      name: joi.string().required(),
+      rev: joi.string().required(),
     })
 
     const validation = joi.validate({ seq, name, rev }, schema)
     if (validation.error) {
-      logger.error(`Sequence: ${validation.error.details[0].context.key} :: ${validation.error.details[0].context.value}`)
+      logger.debug(`Sequence: ${validation.error.details[0].context.key} :: ${validation.error.details[0].context.value}`)
       throw new Error(`Sequence: ${validation.error.details[0].message}`)
     }
 

@@ -54,7 +54,7 @@ const config = {
 
   schema: {
     PORT: joi.number().min(3000).max(6000).required(),
-    LOG_LEVEL: joi.string().valid('info', 'debug').required(),
+    LOG_LEVEL: joi.string().valid('silly', 'debug', 'verbose', 'info', 'warn', 'error').required(),
     PG_HOST: joi.string().required(),
     PG_PORT: joi.number().required().min(1000).max(10000).required(),
     PG_USER: joi.string().required(),

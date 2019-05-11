@@ -25,7 +25,7 @@ const downloads = {
 
   insert: async (name, startTime, endTime, downloadCount) => {
     const schema = joi.object().keys({
-      name: joi.string().max(128).required(),
+      name: joi.string().required(),
       startTime: joi.date().iso().required(),
       endTime: joi.date().iso().required(),
       downloadCount: joi.number().min(0).required(),
@@ -33,7 +33,7 @@ const downloads = {
 
     const validation = joi.validate({ name, startTime, endTime, downloadCount }, schema)
     if (validation.error) {
-      logger.error(`Versions: ${validation.error.details[0].context.key} :: ${validation.error.details[0].context.value}`)
+      logger.debug(`Versions: ${validation.error.details[0].context.key} :: ${validation.error.details[0].context.value}`)
       throw new Error(validation.error.details[0].message)
     }
 

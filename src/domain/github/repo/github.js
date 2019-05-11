@@ -26,27 +26,27 @@ const github = {
 
   insert: async (name, avatarURL, description, createdAt, updatedAt, pushedAt, homepage, size, stars, subscribers, forks, openIssueCount, language, licence, archived, disabled) => {
     const schema = joi.object().keys({
-      name: joi.string().max(128).required(),
-      avatarURL: joi.string().max(128).required(),
-      description: joi.string().max(512).required(),
+      name: joi.string().required(),
+      avatarURL: joi.string().required(),
+      description: joi.string().required(),
       createdAt: joi.date().iso().required(),
       updatedAt: joi.date().iso().required(),
       pushedAt: joi.date().iso().required(),
-      homepage: joi.string().max(128).required(),
+      homepage: joi.string().required(),
       size: joi.number().min(0).required(),
       stars: joi.number().min(0).required(),
       subscribers: joi.number().min(0).required(),
       forks: joi.number().min(0).required(),
       openIssueCount: joi.number().min(0).required(),
-      language: joi.string().max(32).required(),
-      licence: joi.string().max(16).required(),
+      language: joi.string().required(),
+      licence: joi.string().required(),
       archived: joi.bool().required(),
       disabled: joi.bool().required(),
     })
 
     const validation = joi.validate({ name, avatarURL, description, createdAt, updatedAt, pushedAt, homepage, size, stars, subscribers, forks, openIssueCount, language, licence, archived, disabled }, schema)
     if (validation.error) {
-      logger.error(`Versions: ${validation.error.details[0].context.key} :: ${validation.error.details[0].context.value}`)
+      logger.debug(`Versions: ${validation.error.details[0].context.key} :: ${validation.error.details[0].context.value}`)
       throw new Error(validation.error.details[0].message)
     }
 

@@ -7,8 +7,8 @@ const logger = log.init('npm/repo/keywords')
 const keywords = {
   get: async (name, version) => {
     const schema = joi.object().keys({
-      name: joi.string().max(128).required(),
-      version: joi.string().max(64).required(),
+      name: joi.string().required(),
+      version: joi.string().required(),
     })
 
     const validation = joi.validate({ name, version }, schema)
@@ -26,14 +26,14 @@ const keywords = {
 
   insert: async (name, version, keyword) => {
     const schema = joi.object().keys({
-      name: joi.string().max(256).required(),
-      version: joi.string().max(128).required(),
-      keyword: joi.string().max(256).required(),
+      name: joi.string().required(),
+      version: joi.string().required(),
+      keyword: joi.string().required(),
     })
 
     const validation = joi.validate({ name, version, keyword }, schema)
     if (validation.error) {
-      logger.error(`Keywords: ${validation.error.details[0].context.key} :: ${validation.error.details[0].context.value}`)
+      logger.debug(`Keywords: ${validation.error.details[0].context.key} :: ${validation.error.details[0].context.value}`)
       throw new Error(`Keywords: ${validation.error.details[0].message}`)
     }
 

@@ -7,8 +7,8 @@ const logger = log.init('repo/npm/people')
 const people = {
   get: async (name, version) => {
     const schema = joi.object().keys({
-      name: joi.string().max(128).required(),
-      version: joi.string().max(64).required(),
+      name: joi.string().required(),
+      version: joi.string().required(),
     })
 
     const validation = joi.validate({ name, version }, schema)
@@ -26,17 +26,17 @@ const people = {
 
   insert: async (name, version, email, fullname, url, type) => {
     const schema = joi.object().keys({
-      name: joi.string().max(256).required(),
-      version: joi.string().max(128).required(),
-      email: joi.string().max(64).allow('').optional(),
-      fullname: joi.string().max(256).allow('').required(),
-      url: joi.string().max(256).allow('').optional(),
-      type: joi.string().max(16).valid('author', 'maintainer', 'contributor')
+      name: joi.string().required(),
+      version: joi.string().required(),
+      email: joi.string().allow('').optional(),
+      fullname: joi.string().allow('').required(),
+      url: joi.string().allow('').optional(),
+      type: joi.string().valid('author', 'maintainer', 'contributor')
     })
 
     const validation = joi.validate({ name, version, email, fullname, url, type }, schema)
     if (validation.error) {
-      logger.error(`People: ${validation.error.details[0].context.key} :: ${validation.error.details[0].context.value}`)
+      logger.debug(`People: ${validation.error.details[0].context.key} :: ${validation.error.details[0].context.value}`)
       throw new Error(`People: ${validation.error.details[0].message}`)
     }
 

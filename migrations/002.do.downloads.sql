@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS downloads (
   uuid UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  name VARCHAR(128),
+  name VARCHAR,
   startTime TIMESTAMP WITH TIME ZONE,
   endTime TIMESTAMP WITH TIME ZONE,
   downloads BIGINT,

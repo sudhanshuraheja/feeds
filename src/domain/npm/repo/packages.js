@@ -7,7 +7,7 @@ const logger = log.init('npm/repo/packages')
 const packages = {
   get: async (name) => {
     const schema = joi.object().keys({
-      name: joi.string().max(128).required(),
+      name: joi.string().required(),
     })
 
     const validation = joi.validate({ name }, schema)
@@ -25,28 +25,28 @@ const packages = {
 
   insert: async (name, rev, description, readme, timeModified, timeCreated, repositoryType, repositoryURL, repositoryGithubOrg, repositoryGithubRepo, readmeFileName, homepage, bugsURL, bugsEmail, licenceType, licenseURL, users) => {
     const schema = joi.object().keys({
-      name: joi.string().max(256).required(),
-      rev: joi.string().max(128).required(),
+      name: joi.string().required(),
+      rev: joi.string().required(),
       description: joi.string().allow('').optional(),
       readme: joi.string().allow('').optional(),
       timeModified: joi.date().iso().required(),
       timeCreated: joi.date().iso().required(),
-      repositoryType: joi.string().max(128).allow('').optional(),
-      repositoryURL: joi.string().max(256).allow('').optional(),
-      repositoryGithubOrg: joi.string().max(64).allow('').optional(),
-      repositoryGithubRepo: joi.string().max(128).allow('').optional(),
-      readmeFileName: joi.string().max(256).optional(),
-      homepage: joi.string().max(256).optional(),
-      bugsURL: joi.string().max(256).optional(),
-      bugsEmail: joi.string().max(128).optional(),
-      licenceType: joi.string().max(128).allow('').optional(),
-      licenseURL: joi.string().max(256).optional(),
+      repositoryType: joi.string().allow('').optional(),
+      repositoryURL: joi.string().allow('').optional(),
+      repositoryGithubOrg: joi.string().allow('').optional(),
+      repositoryGithubRepo: joi.string().allow('').optional(),
+      readmeFileName: joi.string().optional(),
+      homepage: joi.string().optional(),
+      bugsURL: joi.string().optional(),
+      bugsEmail: joi.string().optional(),
+      licenceType: joi.string().allow('').optional(),
+      licenseURL: joi.string().optional(),
       users: joi.number().optional(),
     })
 
     const validation = joi.validate({ name, rev, description, readme, timeModified, timeCreated, repositoryType, repositoryURL, repositoryGithubOrg, repositoryGithubRepo, readmeFileName, homepage, bugsURL, bugsEmail, licenceType, licenseURL, users }, schema)
     if (validation.error) {
-      logger.error(`Packages: ${validation.error.details[0].context.key} :: ${validation.error.details[0].context.value}`)
+      logger.debug(`Packages: ${validation.error.details[0].context.key} :: ${validation.error.details[0].context.value}`)
       throw new Error(`Packages: ${validation.error.details[0].message}`)
     }
 
