@@ -6,7 +6,8 @@ const _ = require('lodash')
 const db = require('../../lib/npm')
 const repo = require('./repo')
 const log = require('../../lib/logger')
-const Iterator = require('../../lib/iterator')
+const parser = require('./parser')
+const objects = require('../../lib/objects')
 
 const logger = log.init('domain/npm')
 
@@ -27,18 +28,8 @@ const npm = {
   },
 
   process: async (data, done) => {
-    const dataI = new Iterator(data)
 
-    const seq = dataI.$('seq', true)
-    const id = dataI.$('id', true)
-    const rev = dataI.$('changes').$(0).$('rev', true)
-
-    const docI = dataI.$('doc')
-    const doc = docI.value()
-    const name = docI.$('_id', true)
-    const versions = docI.$('versions', true)
-
-    // fLogger(data)
+    const { seq, id, rev, doc, name, versions } = parser.home(data)
     logger.info(`${seq}:${id}`)
 
     await npm.processSequence(seq, id, rev)
@@ -73,18 +64,8 @@ const npm = {
   },
 
   processPackage: async (name, rev, doc) => {
-    const docI = new Iterator(doc)
-    const repositoryType = docI.$('repository').$('type', true)
-    const repositoryURL = docI.$('repository').$('url', true)
-    const bugsURL = docI.$('bugs').$('url', true)
-    const bugsEmail = docI.$('bugs').$('email', true)
-    const {githubOrg, githubRepo} = npm.splitGithubURL(docI.$('repository').$('url', true))
-    const {licenceType, licenceURL} = npm.splitLicense(docI.$('license', true) || docI.$('licenses', true))
-    const usersCount = docI.$('users').keys().length
-    const readme = docI.$('readme').string().replace(/\0/g, '')
-    const description = docI.$('description').string().replace(/\0/g, '')
-    
     try {
+      const { repositoryType, repositoryURL, bugsURL, bugsEmail, githubOrg, githubRepo, licenceType, licenceURL, usersCount, readme, description } = parser.package(doc)
       await repo.packages.insert(name, rev, description, readme, doc.time.modified, doc.time.created, repositoryType, repositoryURL, githubOrg, githubRepo, doc.readmeFileName, doc.homepage, bugsURL, bugsEmail, licenceType, licenceURL, usersCount)
     } catch(err) {
       logger.error(err)
@@ -107,17 +88,8 @@ const npm = {
   },
 
   processVersion: async (details) => {
-    const docI = new Iterator(details)
-    const repositoryType = docI.$('repository').$('type', true)
-    const repositoryURL = docI.$('repository').$('url', true)
-    const bugsURL = docI.$('bugs').$('url', true)
-    const bugsEmail = docI.$('bugs').$('email', true)
-    const {githubOrg, githubRepo} = npm.splitGithubURL(docI.$('repository').$('url', true))
-    const {licenceType, licenceURL} = npm.splitLicense(docI.$('license', true) || docI.$('licenses', true))
-    const committerName = docI.$('_npmUser').$('name', true)
-    const committerEmail = docI.$('_npmUser').$('email', true)
-    
     try {
+      const { repositoryType, repositoryURL, bugsURL, bugsEmail, githubOrg, githubRepo, licenceType, licenceURL, committerName, committerEmail } = parser.version(details)
       // eslint-disable-next-line no-underscore-dangle
       await repo.versions.insert(details._id, details.name, details.version, details.description, details.homepage, repositoryType, repositoryURL, githubOrg, githubRepo, bugsURL, bugsEmail, licenceType, licenceURL, committerName, committerEmail, details.npmVersion, details.nodeVersion, details.distShasum, details.distTarball, details.deprecated)
     } catch(err) {
@@ -129,7 +101,7 @@ const npm = {
   processKeywords: async (name, version, versionDetails) => {
     const keys = []
     const { keywords } = versionDetails
-    if (Array.isArray(keywords)) {
+    if (objects.isArray(keywords)) {
       for (const k in keywords) {
         const key = keywords[k]
         try {
@@ -202,7 +174,7 @@ const npm = {
   processPeople: async (name, version, versionDetails) => {
     const {author, maintainers, contributors} = versionDetails
     try {
-      const { fullname, email, url } = npm.splitPerson(author)
+      const { fullname, email, url } = parser.splitPerson(author)
       if (fullname || email || url) {
         await repo.people.insert(name, version, email, fullname, url, 'author')
       }
@@ -211,11 +183,11 @@ const npm = {
       npm.parent.release()
     }
 
-    if (Array.isArray(maintainers)) {
+    if (objects.isArray(maintainers)) {
       for (const i in maintainers) {
         const person = maintainers[i]
         try {
-          const { fullname, email, url } = npm.splitPerson(person)
+          const { fullname, email, url } = parser.splitPerson(person)
           if (fullname || email || url) {
             await repo.people.insert(name, version, email, fullname, url, 'maintainer')
           }
@@ -227,11 +199,11 @@ const npm = {
     }
 
     const contribs = []
-    if(Array.isArray(contributors)) {
+    if(objects.isArray(contributors)) {
       for (const i in contributors) {
         const person = contributors[i]
         try {
-          const { fullname, email, url } = npm.splitPerson(person)
+          const { fullname, email, url } = parser.splitPerson(person)
           if (fullname || email || url) {
             if (!_.find(contribs, { fullname, email, url })) {
               contribs.push({ fullname, email, url })
@@ -263,53 +235,6 @@ const npm = {
         }
       }
     }
-  },
-
-  splitPerson: (author) => {
-    const person = { fullname: '', email: '', url: '' }
-    if (typeof author === 'object') {
-      person.fullname = author.name ? author.name : ''
-      person.email = author.email ? author.email : ''
-      person.url = author.url ? author.url : ''
-    } else if(typeof author === 'string' && author.length > 0) {
-      [person.fullname, person.email] = author.split('<')
-      if (person.email) {
-        person.email = person.email.replace('>', '').trim()
-      }
-      person.fullname = person.fullname.trim()
-    }
-    return person
-  },
-
-  splitGithubURL: (url) => {
-    const git = { githubOrg: undefined, githubRepo: undefined }
-    if (url) {
-      const split = url.split('/')
-      if (split[split.length - 2] && split[split.length - 1].replace('.git', '')) {
-        git.githubOrg = split[split.length - 2]
-        const repoURL = split[split.length - 1];
-        [ git.githubRepo ]  = repoURL.split('.git')
-      }
-    }
-    return git
-  },
-
-  splitLicense: (license) => {
-    const info = { licenceType: undefined, licenceURL: undefined }
-    if (Array.isArray(license)) {
-      if (license && license[0] && license[0].type) {
-        info.licenceType = license[0].type
-        info.licenceURL = license[0].url  
-      }
-    } else if (typeof license === 'object') {
-      info.licenceType = license.type
-      info.licenceURL = license.url
-    } else if (typeof license === 'string') {
-      if (license !== '') {
-        info.licenceType = license
-      }
-    }
-    return info
   }
 
 }
