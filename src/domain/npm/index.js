@@ -19,7 +19,7 @@ const logger = log.init('domain/npm')
 const npm = {
   parent: null,
   processed: 0,
-  processMax: 50000,
+  processMax: 5000000,
   startingCount: 0,
 
   start: (parent) => {
@@ -74,12 +74,13 @@ const npm = {
   },
 
   processTags: async (name, doc) => {
-    const tags = doc['dist-tags']
+    const { tags } = parser.tags(doc)
     const keys = Object.keys(tags)
     for (const i in keys) {
-      const tag = keys[i]
       try {
-        await repo.tags.insert(name, tag, tags[tag])
+        const key = keys[i]
+        const tag = tags[key]
+        await repo.tags.insert(name, key, tag)
       } catch(err) {
         logger.error(err)
         npm.parent.release()  
@@ -103,8 +104,8 @@ const npm = {
     const { keywords } = versionDetails
     if (objects.isArray(keywords)) {
       for (const k in keywords) {
-        const key = keywords[k]
         try {
+          const key = keywords[k]
           if(key !== '' && !keys.includes(key)) {
             keys.push(key)
             await repo.keywords.insert(name, version, key)
@@ -119,12 +120,13 @@ const npm = {
 
   processDependencies: async (name, version, versionDetails) => {
     const {dependencies, devDependencies, optionalDependencies, bundleDependencies} = versionDetails
-    if (dependencies) {
+    if (objects.isObject(dependencies)) {
       const keys = Object.keys(dependencies)
       for (const i in keys) {
-        const dep = keys[i]
         try {
-          await repo.dependencies.insert(name, version, dep, dependencies[dep], '', 'dep')
+          const key = keys[i]
+          const dependency = dependencies[key]
+          await repo.dependencies.insert(name, version, key, dependency, '', 'dep')
         } catch(err) {
           logger.error(err)
           npm.parent.release()
@@ -132,12 +134,13 @@ const npm = {
       }
     }
 
-    if (devDependencies) {
+    if (objects.isObject(devDependencies)) {
       const keys = Object.keys(devDependencies)
       for (const i in keys) {
-        const dep = keys[i]
         try {
-          await repo.dependencies.insert(name, version, dep, devDependencies[dep], '', 'dev')
+          const key = keys[i]
+          const dependency = devDependencies[key]
+          await repo.dependencies.insert(name, version, key, dependency, '', 'dev')
         } catch(err) {
           logger.error(err)
           npm.parent.release()
@@ -145,12 +148,13 @@ const npm = {
       }
     }
 
-    if (optionalDependencies) {
+    if (objects.isObject(optionalDependencies)) {
       const keys = Object.keys(optionalDependencies)
       for (const i in keys) {
-        const dep = keys[i]
         try {
-          await repo.dependencies.insert(name, version, dep, optionalDependencies[dep], '', 'optional')
+          const key = keys[i]
+          const dependency = optionalDependencies[key]
+          await repo.dependencies.insert(name, version, key, dependency, '', 'optional')
         } catch(err) {
           logger.error(err)
           npm.parent.release()
@@ -158,10 +162,10 @@ const npm = {
       }
     }
 
-    if (bundleDependencies) {
+    if (objects.isArray(bundleDependencies)) {
       for (const i in bundleDependencies) {
-        const dep = bundleDependencies[i]
         try {
+          const dep = bundleDependencies[i]
           await repo.dependencies.insert(name, version, dep, '', '', 'bundle')
         } catch(err) {
           logger.error(err)
@@ -185,8 +189,8 @@ const npm = {
 
     if (objects.isArray(maintainers)) {
       for (const i in maintainers) {
-        const person = maintainers[i]
         try {
+          const person = maintainers[i]
           const { fullname, email, url } = parser.splitPerson(person)
           if (fullname || email || url) {
             await repo.people.insert(name, version, email, fullname, url, 'maintainer')
@@ -201,8 +205,8 @@ const npm = {
     const contribs = []
     if(objects.isArray(contributors)) {
       for (const i in contributors) {
-        const person = contributors[i]
         try {
+          const person = contributors[i]
           const { fullname, email, url } = parser.splitPerson(person)
           if (fullname || email || url) {
             if (!_.find(contribs, { fullname, email, url })) {

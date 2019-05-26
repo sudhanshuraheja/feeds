@@ -35,12 +35,12 @@ const packages = {
       repositoryURL: joi.string().allow('').optional(),
       repositoryGithubOrg: joi.string().allow('').optional(),
       repositoryGithubRepo: joi.string().allow('').optional(),
-      readmeFileName: joi.string().optional(),
-      homepage: joi.string().optional(),
-      bugsURL: joi.string().optional(),
-      bugsEmail: joi.string().optional(),
+      readmeFileName: joi.string().allow('').optional(),
+      homepage: joi.string().allow('').optional(),
+      bugsURL: joi.string().allow('').optional(),
+      bugsEmail: joi.string().allow('').optional(),
       licenceType: joi.string().allow('').optional(),
-      licenseURL: joi.string().optional(),
+      licenseURL: joi.string().allow('').optional(),
       users: joi.number().optional(),
     })
 
