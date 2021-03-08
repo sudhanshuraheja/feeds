@@ -5,7 +5,7 @@
   "author": "Sudhanshu Raheja <sudhanshu@leftshift.io>",
   "license": "MIT",
   "dependencies": {
-    "amqplib": "^0.5.5",
+    "amqplib": "^0.7.1",
     "axios": "^0.19.2",
     "backoff": "^2.5.0",
     "changes-stream": "^2.2.0",
